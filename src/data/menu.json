@@ -1,0 +1,36 @@
+{
+  "data": [{
+      "title": "Usuarios",
+      "icon": "users",
+      "type": "sub",
+      "badgeType": "primary",
+      "badgeValue": "2",
+      "active": false,
+      "children": [{
+          "path": "/usuarios/serenazgo",
+          "title": "Serenazgo",
+          "type": "link"
+        },
+        {
+          "path": "/usuarios/comunal",
+          "title": "Comunal",
+          "type": "link"
+        }
+      ]
+    },
+    {
+      "path": "/app/incidentes",
+      "title": "Tipos de Incidentes",
+      "icon": "git-pull-request",
+      "type": "link",
+      "active": false
+    },
+    {
+      "path": "/app/marcadores",
+      "title": "Marcadores",
+      "icon": "map",
+      "type": "link",
+      "active": false
+    }
+  ]
+}
