@@ -12,6 +12,7 @@ import Serenazgo from '../pages/Usuarios/Serenazgo'
 import Comunal from '../pages/Usuarios/Comunal'
 import Incidentes from '../pages/Incidentes'
 import Marcadores from '../pages/Marcadores'
+import Alertas from '../pages/Alertas'
 // component
 
 Vue.use(Router)
@@ -60,6 +61,14 @@ const routes = [{
         name: 'marcadores',
         meta: {
           title: 'Marcadores',
+        }
+      },
+      {
+        path: 'alertas',
+        component: Alertas,
+        name: 'alertas',
+        meta: {
+          title: 'Alertas',
         }
       }
     ]

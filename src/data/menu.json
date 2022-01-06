@@ -28,6 +28,13 @@
     {
       "path": "/app/marcadores",
       "title": "Marcadores",
+      "icon": "map-pin",
+      "type": "link",
+      "active": false
+    },
+    {
+      "path": "/app/alertas",
+      "title": "Alertas",
       "icon": "map",
       "type": "link",
       "active": false

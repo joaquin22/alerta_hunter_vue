@@ -33,6 +33,12 @@ Vue.use(VueGoogleMaps, {
   },
 });
 
+// firebase.initializeApp({
+//   projectId: 'alerta-2056a'
+// });
+
+// export const db = firebase;
+
 new Vue({
   router,
   store,

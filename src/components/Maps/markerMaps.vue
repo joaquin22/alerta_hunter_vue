@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GmapMap :center="marker" :zoom="12" style="width: 100%; height: 500px">
+    <GmapMap :center="marker" :zoom="zoom" style="width: 100%; height: 500px">
       <GmapMarker :position="marker" :draggable="true" @drag="updateCoordinates" />
     </GmapMap>
   </div>
@@ -16,6 +16,10 @@ export default {
           lng: -71.535,
         };
       },
+    },
+    zoom: {
+      type: Number,
+      default: 12,
     },
   },
   data() {
