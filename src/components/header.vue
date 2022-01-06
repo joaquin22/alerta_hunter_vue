@@ -1,59 +1,5 @@
 <template>
   <div class="header-wrapper row m-0">
-    <form class="form-inline search-full" action="#" method="get" :class="{ open: searchOpen }">
-      <div class="form-group w-100">
-        <div class="Typeahead Typeahead--twitterUsers">
-          <div class="u-posRelative">
-            <input
-              class="demo-input Typeahead-input form-control-plaintext w-100"
-              type="text"
-              v-on:keyup="searchterm"
-              v-model="terms"
-              placeholder="Search Cuba .."
-              name="q"
-              title
-              autofocus
-            />
-            <div class="spinner-border Typeahead-spinner" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <feather class="close-search" type="x" @click="search_close()"></feather>
-          </div>
-          <div
-            :class="searchResult ? 'Typeahead-menu is-open' : 'Typeahead-menu'"
-            v-if="menuItems.length"
-          >
-            <div
-              class="ProfileCard u-cf"
-              v-for="(menuItem, index) in menuItems.slice(0, 8)"
-              :key="index"
-            >
-              <div class="ProfileCard-avatar header-search">
-                <!-- <feather :type="menuItem.icon"></feather> -->
-              </div>
-              <div class="ProfileCard-details">
-                <div class="ProfileCard-realName">
-                  <span @click="removeFix()">
-                    <router-link :to="{ path: menuItem.path }" class="realname">{{ menuItem.title }}</router-link>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            :class="
-              searchResultEmpty ? 'Typeahead-menu is-open' : 'Typeahead-menu'
-            "
-          >
-            <div class="tt-dataset tt-dataset-0">
-              <div
-                class="EmptyMessage"
-              >Your search turned up 0 results. Opps There are no result found.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
     <div class="header-logo-wrapper">
       <div class="logo-wrapper">
         <router-link to="/">
@@ -206,7 +152,6 @@
 </template>
 <script>
 var body = document.getElementsByTagName("body")[0];
-import { mapState } from "vuex";
 export default {
   name: "Search",
   data() {
@@ -228,11 +173,12 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      menuItems: (state) => state.menu.searchData,
-      megamenuItems: (state) => state.menu.megamenu,
-      usuario: (state) => state.authentication.user,
-    }),
+    // ...mapState({
+    //   usuario: (state) => state.authentication.user,
+    // }),
+    usuario() {
+      return this.$store.state.authentication.user;
+    },
   },
   methods: {
     toggle_sidebar() {
@@ -246,21 +192,6 @@ export default {
     },
     openlevelmenu() {
       this.openLevelmenu = !this.openLevelmenu;
-    },
-    openmegamenu() {
-      this.openbonusUI = !this.openbonusUI;
-    },
-    closeBonusUI() {
-      this.openbonusUI = false;
-    },
-    search_open() {
-      this.searchOpen = true;
-    },
-    search_close() {
-      this.searchOpen = false;
-    },
-    searchterm: function () {
-      this.$store.dispatch("menu/searchTerm", this.terms);
     },
     changeLocale(locale) {
       this.setLang(locale);
@@ -307,6 +238,7 @@ export default {
     },
     logout() {
       this.$store.dispatch("authentication/logout");
+      this.$router.replace("/auth/login");
     },
   },
   watch: {
@@ -314,11 +246,6 @@ export default {
       if (from !== to) {
         this.$router.go(this.$route.path);
       }
-    },
-    menuItems: function () {
-      this.terms ? this.addFix() : this.removeFix();
-      if (!this.menuItems.length) this.searchResultEmpty = true;
-      else this.searchResultEmpty = false;
     },
   },
 };

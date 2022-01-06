@@ -3,7 +3,7 @@ import {
 } from '../../_services';
 
 const state = {
-    incidentes: [],
+    tipoIncidentes: []
 }
 
 const getters = {
@@ -11,37 +11,70 @@ const getters = {
 };
 
 const actions = {
-    getIncidentes({
+    getTipoIncidentes({
         commit
     }) {
-        incidenteService.getIncidentes().then(
-            incidentes => {
-                commit('setIncidentes', incidentes);
+        incidenteService.getTipoIncidentes().then(
+            tipos => {
+                commit('setTipoIncidentes', tipos);
             },
             error => {
                 console.log(error);
             }
         )
     },
-    addIncidente({
+    addTipoIncidentes({
         commit
     }, datos) {
-        incidenteService.addIncidente(datos).then(
-            incidente => {
-                commit('addIncidente', incidente);
-            }, error => {
-                console.log(error)
+        incidenteService.addTipoIncidentes(datos).then(
+            tipo => {
+                commit('addTipoIncidente', tipo);
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    },
+    updateTipoIncidentes({
+        commit
+    }, payload) {
+        incidenteService.updateTipoIncidentes(payload).then(
+            tipo => {
+                commit('updateTipoIncidentes', tipo);
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    },
+    deleteTipoIncidentes({
+        commit
+    }, id) {
+        incidenteService.deleteTipoIncidentes(id).then(
+            () => {
+                commit('deleteTipoIncidente', id);
+            },
+            error => {
+                console.log(error);
             }
         )
     },
 };
 
 const mutations = {
-    setIncidentes(state, incidentes) {
-        state.incidentes = incidentes;
+    setTipoIncidentes(state, tipos) {
+        state.tipoIncidentes = tipos;
     },
-    addIncidente(state, incidente) {
-        state.incidentes.push(incidente);
+    addTipoIncidente(state, tipo) {
+        state.tipoIncidentes.push(tipo);
+    },
+    updateTipoIncidentes(state, tipo) {
+        const ItemIndex = state.tipoIncidentes.findIndex((p) => p.id == tipo.id)
+        Object.assign(state.tipoIncidentes[ItemIndex], tipo)
+    },
+    deleteTipoIncidente(state, id) {
+        const ItemIndex = state.tipoIncidentes.findIndex((p) => p.id == id)
+        state.tipoIncidentes.splice(ItemIndex, 1)
     },
 };
 

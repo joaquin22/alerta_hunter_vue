@@ -6,26 +6,27 @@ import {
 } from '../constants/config'
 
 export const incidenteService = {
-    getIncidentes,
-    addIncidente,
+    getTipoIncidentes,
+    addTipoIncidentes,
+    deleteTipoIncidentes,
+    updateTipoIncidentes
 };
 
-
-function getIncidentes() {
+function getTipoIncidentes() {
     const requestOptions = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
     };
-    return fetch(`${apiUrl}/incidentes/`, requestOptions)
+    return fetch(`${apiUrl}/incidentes/tipos/`, requestOptions)
         .then(handleResponse)
-        .then(incidentes => {
-            return incidentes;
+        .then(tipos => {
+            return tipos;
         })
 }
 
-function addIncidente(datos) {
+function addTipoIncidentes(datos) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -33,10 +34,42 @@ function addIncidente(datos) {
         },
         body: JSON.stringify(datos)
     };
-    return fetch(`${apiUrl}/incidentes/`, requestOptions)
+
+    return fetch(`${apiUrl}/incidentes/tipos/`, requestOptions)
         .then(handleResponse)
-        .then(incidente => {
-            return incidente;
+        .then(tipos => {
+            return tipos;
+        })
+}
+
+function deleteTipoIncidentes(id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    };
+
+    return fetch(`${apiUrl}/incidentes/tipos/${id}/`, requestOptions)
+        .then(handleResponse)
+        .then(tipos => {
+            return tipos;
+        })
+}
+
+function updateTipoIncidentes(payload) {
+    const requestOptions = {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload.datos)
+    };
+
+    return fetch(`${apiUrl}/incidentes/tipos/${payload.id}/`, requestOptions)
+        .then(handleResponse)
+        .then(tipos => {
+            return tipos;
         })
 }
 

@@ -12,9 +12,6 @@ export const userService = {
     login,
     logout,
     getAll,
-    getSerenazgo,
-    addSerenazgo,
-    deleteSerenazgo,
     getComunales,
     addComunal
 };
@@ -45,7 +42,7 @@ function login(username, password) {
                 localStorage.setItem('user', JSON.stringify(user.user));
             }
 
-            return user;
+            return user.user;
         })
 }
 
@@ -68,11 +65,11 @@ function handleResponse(response) {
     return response.text().then(text => {
         const data = text && JSON.parse(text);
         if (!response.ok) {
-            if (response.status === 401) {
-                // auto logout if 401 response returned from api
-                logout();
-                location.reload(true);
-            }
+            // if (response.status === 401) {
+            //     // auto logout if 401 response returned from api
+            //     logout();
+            //     location.reload(true);
+            // }
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
         }
@@ -81,52 +78,6 @@ function handleResponse(response) {
     });
 }
 
-function getSerenazgo() {
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    };
-    return fetch(`${apiUrl}/usuarios/serenazgo/`, requestOptions)
-        .then(handleResponse)
-        .then(users => {
-            // login successful if there's a jwt token in the response
-            return users;
-        })
-}
-
-function addSerenazgo(datos) {
-    console.log(datos)
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos)
-    };
-    return fetch(`${apiUrl}/usuarios/serenazgo/`, requestOptions)
-        .then(handleResponse)
-        .then(users => {
-            // login successful if there's a jwt token in the response
-            return users;
-        })
-}
-
-function deleteSerenazgo(id) {
-    const requestOptions = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    };
-    return fetch(`${apiUrl}/usuarios/serenazgo/${id}`, requestOptions)
-        .then(handleResponse)
-        .then(users => {
-            // login successful if there's a jwt token in the response
-            return users;
-        })
-}
 
 function getComunales() {
     const requestOptions = {

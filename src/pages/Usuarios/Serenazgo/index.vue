@@ -40,9 +40,9 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
-      @ok="submitForm"
+      @ok="handleOk"
     >
-      <b-form>
+      <b-form @submit.stop.prevent="submitForm">
         <b-form-group id="input-nombre" label="Nombre:" label-for="nombres">
           <b-form-input id="nombres" type="text" placeholder="Nombre" v-model="form.first_name"></b-form-input>
         </b-form-group>
@@ -65,15 +65,6 @@
         </b-form-group>
       </b-form>
     </b-modal>
-
-    <!-- DELETE MODAL -->
-    <b-modal
-      title="Eliminar Serenazgo"
-      cancel-title="Cancelar"
-      ok-title="Eliminar"
-      id="modal-delete"
-      @ok="eliminar(deleteModalItem.id)"
-    >Esta seguro que desea eliminar a {{deleteModalItem.first_name}}</b-modal>
   </div>
 </template>
 
@@ -119,12 +110,17 @@ export default {
       modal: {
         title: "",
       },
+      edit: false,
+      updateId: 0,
     };
   },
   computed: {
     ...mapState({
-      usuarios: (state) => state.usuarios.serenazgos,
+      usuarios: (state) => state.serenazgos.serenazgos,
     }),
+    hasError() {
+      return this.$store.state.serenazgos.hasError;
+    },
   },
   created() {
     this.getData();
@@ -132,42 +128,77 @@ export default {
   methods: {
     getData() {
       const { dispatch } = this.$store;
-      dispatch("usuarios/getSerenazgo");
+      dispatch("serenazgos/getSerenazgos");
     },
-    submitForm() {
-      this.$v.$touch();
-      if (!this.$v.form.$anyError) {
-        const { dispatch } = this.$store;
-        const { form } = this;
-        dispatch("usuarios/addSerenazgo", form);
-        this.$toasted.show("Se agrago un nuevo usuario", {
-          theme: "outline",
-          position: "top-right",
-          icon: "check",
-          type: "success",
-          duration: 2000,
+    handleOk(bvModalEvt) {
+      bvModalEvt.preventDefault();
+      this.submitForm();
+    },
+    async submitForm() {
+      const { dispatch } = this.$store;
+      const { form } = this;
+
+      if (this.edit) {
+        if (!form.password) {
+          delete form["password"];
+        }
+        dispatch("serenazgos/updateSerenazgo", {
+          id: this.updateId,
+          datos: form,
+        }).then(() => {
+          this.$nextTick(() => {
+            this.$bvModal.hide("modal-usuario");
+          });
+          this.showToast("Se edito al usuario", "check", "success");
+          this.edit = false;
+        });
+      } else {
+        await dispatch("serenazgos/addSerenazgo", form).then(() => {
+          this.$nextTick(() => {
+            this.$bvModal.hide("modal-usuario");
+          });
+          this.showToast("Se agrago un nuevo usuario", "check", "success");
         });
       }
+      this.form = {
+        first_name: "",
+        last_name: "",
+        password: "",
+        username: "",
+      };
     },
     editModal(item) {
       this.form.first_name = item.first_name;
       this.form.last_name = item.last_name;
       this.form.username = item.email;
+      this.edit = true;
+      this.updateId = item.id;
       this.$bvModal.show("modal-usuario");
       this.modal.title = "Editar Serenazgo";
     },
-    deleteModal(item) {
-      this.deleteModalItem = item;
-      this.$bvModal.show("modal-delete");
+    deleteModal(row) {
+      this.$swal({
+        text: `¿Esta seguro que desea elimnar a ${row.first_name} ?`,
+        showCancelButton: true,
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#4466f2",
+        cancelButtonText: "Cancelar",
+        cancelButtonColor: "#efefef",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.value) {
+          const { dispatch } = this.$store;
+          dispatch("serenazgos/deleteSerenazgo", row.id);
+          this.showToast("Se elimino correctamente", "trash", "error");
+        }
+      });
     },
-    eliminar(id) {
-      const { dispatch } = this.$store;
-      dispatch("usuarios/deleteSerenazgo", id);
-      this.$toasted.show("El usuario se ha eliminado correctamente", {
+    showToast(mensaje, icono, type) {
+      this.$toasted.show(mensaje, {
         theme: "outline",
         position: "top-right",
-        icon: "trash",
-        type: "error",
+        icon: icono,
+        type: type,
         duration: 2000,
       });
     },

@@ -10,8 +10,9 @@
                 <a class="logo">
                   <img
                     class="img-fluid for-light"
-                    src="../assets/images/logo/login.png"
+                    src="../assets/images/logo/logo-hunter.png"
                     alt="looginpage"
+                    v-bind="imgProps"
                   />
                   <img
                     class="img-fluid for-dark"
@@ -27,10 +28,13 @@
                     <span>JWT</span>
                   </template>
                   <b-card-text>
-                    <div class="alert alert-info">
-                      Username: test
-                      <br />Password: test
-                    </div>
+                    <b-alert
+                      variant="danger"
+                      show
+                      dismissible
+                      class="alert alert-danger dark alert-dismissible"
+                      v-show="hasError"
+                    >Usuario y/o contraseñas incorrectos.</b-alert>
                     <form class="theme-form" @submit.prevent="handleSubmit">
                       <div class="form-group">
                         <label for="username">Username</label>
@@ -79,23 +83,26 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import Userauth from "../auth/js/index";
-
 export default {
   name: "login",
   data() {
     return {
       type: "password",
-      username: "admin",
-      passwordjwt: "admin",
+      username: "evolution",
+      passwordjwt: "3volution",
       submitted: false,
+      imgProps: {
+        width: 100,
+      },
     };
   },
   computed: {
     // JWT authentication
     loggingIn() {
       return this.$store.state.authentication.status.loggingIn;
+    },
+    hasError() {
+      return this.$store.state.alert.hasError;
     },
   },
   created() {
@@ -121,88 +128,6 @@ export default {
       }
     },
     // Firebase login
-    signUp: function () {
-      this.submitted = true;
-      if (this.email === "" && this.password === "") {
-        (this.email = "test@admin.com"), (this.password = "test@123456");
-      } else {
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then(
-            (result) => {
-              Userauth.localLogin(result);
-              this.$router.replace("/");
-            },
-            (err) => {
-              (this.email = "test@admin.com"), (this.password = "test@123456");
-              this.$toasted.show("Oops..." + err.message, {
-                theme: "bubble",
-                position: "bottom-right",
-                type: "error",
-                duration: 2000,
-              });
-            }
-          );
-      }
-    },
-    // Social login
-    socialLogin() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-          Userauth.localLogin(result);
-          this.$router.replace("/");
-        })
-        .catch((err) => {
-          alert("Oops. " + err.message);
-        });
-    },
-    socialLoginFacebook() {
-      const provider = new firebase.auth.FacebookAuthProvider();
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-          Userauth.localLogin(result);
-          this.$router.replace("/");
-        })
-        .catch((err) => {
-          alert("Oops. " + err.message);
-        });
-    },
-    socialLoginTwitter() {
-      const provider = new firebase.auth.TwitterAuthProvider();
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-          Userauth.localLogin(result);
-          this.$router.replace("/");
-        })
-        .catch((err) => {
-          alert("Oops. " + err.message);
-        });
-    },
-    socialLoginGit() {
-      const provider = new firebase.auth.GithubAuthProvider();
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((result) => {
-          Userauth.localLogin(result);
-          this.$router.replace("/");
-        })
-        .catch((err) => {
-          alert("Oops. " + err.message);
-        });
-    },
-    // Auth0 login
-    login() {
-      Userauth.login();
-    },
   },
 };
 </script>

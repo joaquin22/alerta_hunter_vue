@@ -50,7 +50,6 @@ export const authentication = {
         }) {
             userService.logout();
             commit('logout');
-            router.replace('/auth/login');
         }
     },
     mutations: {

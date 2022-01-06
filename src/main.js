@@ -3,6 +3,7 @@ import App from './App.vue'
 import BootstrapVue from 'bootstrap-vue'
 import router from './router'
 import Breadcrumbs from './components/bread_crumbs'
+import VueSweetalert2 from 'vue-sweetalert2';
 import {
   store
 } from './store';
@@ -19,6 +20,7 @@ import './assets/scss/app.scss'
 
 Vue.use(VueFeather);
 Vue.use(BootstrapVue)
+Vue.use(VueSweetalert2);
 Vue.component('Breadcrumbs', Breadcrumbs)
 Vue.use(Toasted, {
   iconPack: 'fontawesome'

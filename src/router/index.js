@@ -72,7 +72,7 @@ const routes = [{
       name: 'Login 1',
       component: login,
       meta: {
-        title: ' login | Cuba - Premium Admin Template',
+        title: 'Inicio de sesión',
       }
     }, ]
   },
