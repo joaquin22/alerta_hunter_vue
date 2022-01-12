@@ -1,5 +1,5 @@
 module.exports = {
-    // outputDir: '/home/joaquin/Documentos/Evolution/DiLorenzo/dist',
+    outputDir: '/root/Documentos/Proyectos/alertahunter/dist',
     assetsDir: 'static',
     publicPath: "/"
 };

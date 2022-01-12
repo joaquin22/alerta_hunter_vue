@@ -11,8 +11,16 @@
           </b-card>
         </div>
         <div class="col-sm-12 col-xl-4">
+          <b-alert show variant="info" v-show="alertasExists">No hay mas alertas por atender</b-alert>
+
           <VuePerfectScrollbar class="scroll-area" :settings="settings6">
-            <alertas v-for="a in alertas" :key="a.id" :datos="a" @goMap="goMap" />
+            <alertas
+              v-for="a in alertas"
+              :key="a.id"
+              :datos="a"
+              @goMap="goMap"
+              @atendido="atendido"
+            />
           </VuePerfectScrollbar>
         </div>
       </div>
@@ -51,8 +59,9 @@ export default {
     };
   },
   computed: {
-    alertasComputed() {
-      return this.alertas;
+    alertasExists() {
+      if (this.alertas.length == 0) return true;
+      else return false;
     },
   },
   created() {
@@ -61,7 +70,7 @@ export default {
   methods: {
     getIncidentes() {
       db.collection("incidentes")
-        .orderBy("id")
+        .orderBy("id", "desc")
         .onSnapshot((querySnapshot) => {
           this.alertas = [];
           querySnapshot.forEach((doc) => {
@@ -71,9 +80,22 @@ export default {
         });
     },
     goMap(position) {
-      console.log(position);
       this.marker = position;
       this.zoom = 15;
+    },
+    atendido(id) {
+      const { dispatch } = this.$store;
+      const payload = {
+        id: id,
+        datos: { atendidoSerenazgo: true },
+      };
+      dispatch("incidentes/updateIncidentes", payload);
+      var jobskill_query = db.collection("incidentes").where("id", "==", id);
+      jobskill_query.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          doc.ref.delete();
+        });
+      });
     },
   },
   //   firestore: {

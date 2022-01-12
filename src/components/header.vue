@@ -12,7 +12,7 @@
     </div>
     <div class="nav-right col-12 pull-right right-header p-0">
       <ul class="nav-menus">
-        <li class="onhover-dropdown">
+        <!-- <li class="onhover-dropdown">
           <div class="notification-box">
             <feather type="bell"></feather>
             <span class="badge badge-pill badge-secondary">4</span>
@@ -54,7 +54,7 @@
               <a class="btn btn-primary" href="#">Check all notification</a>
             </li>
           </ul>
-        </li>
+        </li>-->
         <li>
           <div class="mode">
             <i
@@ -81,33 +81,9 @@
           </div>
           <ul class="profile-dropdown onhover-show-div">
             <li>
-              <a href="#">
-                <feather type="user"></feather>
-                <span>Account</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <feather type="mail"></feather>
-                <span>Inbox</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <feather type="file-text"></feather>
-                <span>Taskboard</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <feather type="settings"></feather>
-                <span>Settings</span>
-              </a>
-            </li>
-            <li>
               <a @click="logout">
                 <feather type="log-in"></feather>
-                <span>Log out</span>
+                <span>Cerrar Sesión</span>
               </a>
             </li>
           </ul>

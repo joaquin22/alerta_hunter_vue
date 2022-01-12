@@ -59,6 +59,9 @@ const actions = {
             }
         )
     },
+    updateIncidentes(_, payload) {
+        incidenteService.updateIncidentes(payload)
+    },
 };
 
 const mutations = {

@@ -1,12 +1,15 @@
 <template>
-  <b-card header-tag="div" :bg-variant="datos.color" class="h-25 card-alertas" @click="goMap">
-    <h6>{{datos.tipo}}</h6>
+  <b-card class="card-alertas" :style="{ 'background-color': datos.color }" @click.stop="goMap">
+    <b-card-title>{{datos.tipo}}</b-card-title>
     <b-card-text class="mb-0">
       Nombres: {{datos.nombre}}
       <br />
-      Nro. Documento: {{datos.dni}}
+      Nro. Documento: {{datos.id}}
+      <br />
+      Telefono: {{datos.telefono}}
       <br />
       Ubicación: {{datos.ubicacion}}
+      <b-button pill variant="primary" @click.stop="atendido">Atendido</b-button>
     </b-card-text>
   </b-card>
 </template>
@@ -34,10 +37,13 @@ export default {
     goMap() {
       let cooredenadas = this.datos.ubicacion.split(",");
       const position = {
-        lat: parseInt(cooredenadas[0]),
-        lng: parseInt(cooredenadas[1]),
+        lat: parseFloat(cooredenadas[0]),
+        lng: parseFloat(cooredenadas[1]),
       };
       this.$emit("goMap", position);
+    },
+    atendido() {
+      this.$emit("atendido", this.datos.id);
     },
   },
 };

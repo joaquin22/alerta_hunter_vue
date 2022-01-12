@@ -37,26 +37,28 @@
                     >Usuario y/o contraseñas incorrectos.</b-alert>
                     <form class="theme-form" @submit.prevent="handleSubmit">
                       <div class="form-group">
-                        <label for="username">Username</label>
+                        <label for="username">Usuario</label>
                         <input
                           type="text"
                           v-model="username"
                           name="username"
                           class="form-control"
+                          placeholder="Usuario"
                           :class="{ 'is-invalid': submitted && !username }"
                         />
                         <div
                           v-show="submitted && !username"
                           class="invalid-feedback"
-                        >Username is required</div>
+                        >El campo no puede etar vacio</div>
                       </div>
                       <div class="form-group">
-                        <label for="password">Password</label>
+                        <label for="password">Contraseña</label>
                         <input
                           type="password"
                           v-model="passwordjwt"
                           name="password"
                           class="form-control"
+                          placeholder="Contraseña"
                           :class="{
                                 'is-invalid': submitted && !passwordjwt,
                               }"
@@ -64,7 +66,7 @@
                         <div
                           v-show="submitted && !passwordjwt"
                           class="invalid-feedback"
-                        >Password is required</div>
+                        >El campo no puede etar vacio</div>
                       </div>
                       <div class="form-group mt-3 mb-0">
                         <button class="btn btn-primary btn-block" :disabled="loggingIn">Login</button>
@@ -88,8 +90,8 @@ export default {
   data() {
     return {
       type: "password",
-      username: "evolution",
-      passwordjwt: "3volution",
+      username: "",
+      passwordjwt: "",
       submitted: false,
       imgProps: {
         width: 100,

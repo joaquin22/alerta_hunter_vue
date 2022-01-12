@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs title="Usuarios" />
+    <Breadcrumbs title="Tipos de Incidentes" />
     <!-- Container-fluid starts-->
     <div class="container-fluid">
       <div class="row">
@@ -13,7 +13,7 @@
                   v-b-modal.modal-6
                   class="btn btn-primary pull-right m-l-10"
                   @click="modal.title = 'Nuevo Tipo de Incidente'"
-                >Añanir nuevo Tipo de Incidente</a>
+                >Añadir nuevo Tipo de Incidente</a>
               </h5>
             </div>
             <div class="card-body">

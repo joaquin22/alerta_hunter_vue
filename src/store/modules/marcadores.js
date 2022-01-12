@@ -44,6 +44,7 @@ const actions = {
             }
         )
     },
+
     deleteMarcador({
         commit
     }, id) {
@@ -53,13 +54,25 @@ const actions = {
             }
         )
     },
-
+    // TIPOS DE MARCADORES
     getTipoMarcadores({
         commit
     }) {
         marcadoresService.getTipoMarcador().then(
             tipos => {
                 commit('setTipoMarcadores', tipos);
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    },
+    addTipoMarcadores({
+        commit
+    }, datos) {
+        marcadoresService.addTipoMarcador(datos).then(
+            tipo => {
+                commit('addTipoMarcador', tipo);
             },
             error => {
                 console.log(error);
@@ -85,6 +98,9 @@ const mutations = {
     },
     setTipoMarcadores(state, tipos) {
         state.tipos = tipos;
+    },
+    addTipoMarcador(state, tipo) {
+        state.tipos.push(tipo);
     },
 };
 

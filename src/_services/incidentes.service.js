@@ -9,7 +9,8 @@ export const incidenteService = {
     getTipoIncidentes,
     addTipoIncidentes,
     deleteTipoIncidentes,
-    updateTipoIncidentes
+    updateTipoIncidentes,
+    updateIncidentes
 };
 
 function getTipoIncidentes() {
@@ -67,6 +68,22 @@ function updateTipoIncidentes(payload) {
     };
 
     return fetch(`${apiUrl}/incidentes/tipos/${payload.id}/`, requestOptions)
+        .then(handleResponse)
+        .then(tipos => {
+            return tipos;
+        })
+}
+
+function updateIncidentes(payload) {
+    const requestOptions = {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload.datos)
+    };
+
+    return fetch(`${apiUrl}/incidentes/${payload.id}/`, requestOptions)
         .then(handleResponse)
         .then(tipos => {
             return tipos;

@@ -4,14 +4,16 @@ import {
 
 const state = {
     serenazgos: [],
-    error: null,
-    hasError: false
 }
 
 const getters = {
-    getError: (state) => {
-        return state.error
+    serenazgoDuplicado: (state) => (obj) => {
+
+        const user = state.serenazgos.find((v) => v.username == obj.username && v.id != obj.id)
+        if (user) return true;
+        else return false
     }
+
 
 };
 
@@ -35,7 +37,7 @@ const actions = {
             usuario => {
                 commit('addSerenazgo', usuario);
             }, error => {
-                commit('setError', error)
+                console.log(error)
             }
         )
     },
@@ -57,7 +59,7 @@ const actions = {
             serenazgo => {
                 commit('updateSerenazgo', serenazgo);
             }, error => {
-                commit('setError', error)
+                console.log(error)
             }
         )
     },
@@ -69,8 +71,6 @@ const mutations = {
     },
     addSerenazgo(state, serenazgo) {
         state.serenazgos.push(serenazgo);
-        state.error = null;
-        state.hasError = false;
     },
     deleteSerenazgo(state, id) {
         const ItemIndex = state.serenazgos.findIndex((p) => p.id == id)
@@ -79,12 +79,7 @@ const mutations = {
     updateSerenazgo(state, serenazgo) {
         const ItemIndex = state.serenazgos.findIndex((p) => p.id == serenazgo.id)
         Object.assign(state.serenazgos[ItemIndex], serenazgo)
-        state.error = null;
     },
-    setError(state, error) {
-        state.error = error;
-        state.hasError = true;
-    }
 };
 
 

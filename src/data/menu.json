@@ -26,11 +26,17 @@
       "active": false
     },
     {
-      "path": "/app/marcadores",
       "title": "Marcadores",
       "icon": "map-pin",
-      "type": "link",
-      "active": false
+      "type": "sub",
+      "badgeType": "primary",
+      "badgeValue": "2",
+      "active": false,
+      "children": [{
+        "path": "/app/marcadores",
+        "title": "Marcadores",
+        "type": "link"
+      }]
     },
     {
       "path": "/app/alertas",

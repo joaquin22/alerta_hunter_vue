@@ -10,8 +10,10 @@ import login from '../auth/login';
 
 import Serenazgo from '../pages/Usuarios/Serenazgo'
 import Comunal from '../pages/Usuarios/Comunal'
+import Ciudadanos from '../pages/Usuarios/Ciudadanos'
 import Incidentes from '../pages/Incidentes'
 import Marcadores from '../pages/Marcadores'
+import TipoMarcadores from '../pages/Marcadores/tiposMarcador'
 import Alertas from '../pages/Alertas'
 // component
 
@@ -31,7 +33,7 @@ const routes = [{
         name: 'serenazgo',
         component: Serenazgo,
         meta: {
-          title: 'Serenazgos',
+          title: 'Hunter Seguro | Serenazgos',
         }
       },
       {
@@ -39,7 +41,7 @@ const routes = [{
         name: 'comunal',
         component: Comunal,
         meta: {
-          title: 'Comunal',
+          title: 'Hunter Seguro | Comunal',
         }
       }
     ]
@@ -52,7 +54,7 @@ const routes = [{
         component: Incidentes,
         name: 'incidentes',
         meta: {
-          title: 'Incidentes',
+          title: 'Hunter Seguro | Incidentes',
         }
       },
       {
@@ -60,7 +62,15 @@ const routes = [{
         component: Marcadores,
         name: 'marcadores',
         meta: {
-          title: 'Marcadores',
+          title: 'Hunter Seguro | Marcadores',
+        }
+      },
+      {
+        path: 'tipos-marcador',
+        component: TipoMarcadores,
+        name: 'tipos-marcador',
+        meta: {
+          title: 'Hunter Seguro | Tipo de Marcador',
         }
       },
       {
@@ -68,7 +78,15 @@ const routes = [{
         component: Alertas,
         name: 'alertas',
         meta: {
-          title: 'Alertas',
+          title: 'Hunter Seguro | Alertas',
+        }
+      },
+      {
+        path: 'ciudadanos',
+        component: Ciudadanos,
+        name: 'ciudadanos',
+        meta: {
+          title: 'Hunter Seguro | Ciudadanos',
         }
       }
     ]

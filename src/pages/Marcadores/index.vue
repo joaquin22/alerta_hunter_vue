@@ -12,12 +12,12 @@
                   v-b-modal.marcador-modal
                   class="btn btn-primary pull-right m-l-10"
                   @click="cambiarModal('HUNTER')"
-                >Añanir nuevo Marcador Hunter</a>
+                >Añadir nuevo Marcador Hunter</a>
                 <a
                   v-b-modal.marcador-modal
                   class="btn btn-primary pull-right m-l-10"
                   @click="cambiarModal('AREQUIPA')"
-                >Añanir nuevo Marcador Arequipa</a>
+                >Añadir nuevo Marcador Arequipa</a>
               </h5>
             </div>
             <div class="card-body">
@@ -293,7 +293,7 @@ export default {
       this.resetForm();
       this.form.lugar = lugar;
       this.modal.action.create = true;
-      this.modal.title = "Agregar Marcador";
+      this.modal.title = "Agregar Marcador " + lugar;
       if (lugar == "AREQUIPA") {
         this.form.mostrar = false;
         this.isMapa = false;

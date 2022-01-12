@@ -40,28 +40,59 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="handleOk"
     >
       <b-form @submit.stop.prevent="submitForm">
         <b-form-group id="input-nombre" label="Nombre:" label-for="nombres">
-          <b-form-input id="nombres" type="text" placeholder="Nombre" v-model="form.first_name"></b-form-input>
+          <b-form-input
+            :state="validateState('first_name')"
+            id="nombres"
+            type="text"
+            placeholder="Nombre"
+            v-model="form.first_name"
+          ></b-form-input>
+          <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-apellido" label="Apellido:" label-for="apellidos">
-          <b-form-input id="apellidos" type="text" placeholder="Apellido" v-model="form.last_name"></b-form-input>
+          <b-form-input
+            :state="validateState('last_name')"
+            id="apellidos"
+            type="text"
+            placeholder="Apellido"
+            v-model="form.last_name"
+          ></b-form-input>
+          <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-email" label="E-mail:" label-for="E-mail">
-          <b-form-input id="email" type="email" placeholder="E-mail" v-model="form.username"></b-form-input>
+          <b-form-input
+            :state="validateState('username')"
+            id="email"
+            type="email"
+            placeholder="E-mail"
+            v-model="form.username"
+          ></b-form-input>
+          <b-form-invalid-feedback
+            v-if="!$v.form.username.required"
+            id="input-2-live-feedback"
+          >Este campo es obligatorio.</b-form-invalid-feedback>
+          <b-form-invalid-feedback
+            v-if="!$v.form.username.duplicados"
+            id="input-2-live-feedback"
+          >El email ingresado ya existe.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-password" label="Contraseña:" label-for="password">
           <b-form-input
+            :state="validateState('password')"
             id="password"
             type="password"
             placeholder="Password"
             v-model="form.password"
           ></b-form-input>
+          <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
       </b-form>
     </b-modal>
@@ -70,13 +101,28 @@
 
 <script>
 import { mapState } from "vuex";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+import { store } from "../../../store";
+
+// const mustBeCool = (value) => value.includes("cool");
+const duplicados = (value, params) => {
+  const obj = {
+    id: params.id,
+    username: value,
+  };
+  return !store.getters["serenazgos/serenazgoDuplicado"](obj);
+};
+
 export default {
+  mixins: [validationMixin],
   data() {
     return {
       form: {
-        first_name: "",
-        last_name: "",
-        password: "",
+        id: null,
+        first_name: null,
+        last_name: null,
+        password: null,
         username: "",
       },
       fields: [
@@ -114,27 +160,72 @@ export default {
       updateId: 0,
     };
   },
+  validations: {
+    form: {
+      first_name: {
+        required,
+      },
+      last_name: {
+        required,
+      },
+      password: {
+        required,
+      },
+      username: {
+        required,
+        duplicados,
+      },
+    },
+  },
   computed: {
     ...mapState({
       usuarios: (state) => state.serenazgos.serenazgos,
     }),
-    hasError() {
-      return this.$store.state.serenazgos.hasError;
-    },
   },
   created() {
     this.getData();
   },
   methods: {
+    validateState(name) {
+      if (name == "password" && this.edit) return null;
+      const { $dirty, $error } = this.$v.form[name];
+      return $dirty ? !$error : null;
+    },
+    resetForm() {
+      this.edit = false;
+      this.form = {
+        first_name: null,
+        last_name: null,
+        password: null,
+        username: null,
+      };
+
+      this.$nextTick(() => {
+        this.$v.$reset();
+      });
+    },
     getData() {
       const { dispatch } = this.$store;
       dispatch("serenazgos/getSerenazgos");
     },
     handleOk(bvModalEvt) {
       bvModalEvt.preventDefault();
+      this.$v.form.$touch();
+
+      if (this.edit) {
+        if (this.$v.form.$anyError) {
+          if (this.$v.form.username.$anyError) {
+            return;
+          }
+        }
+      } else {
+        if (this.$v.form.$anyError) {
+          return;
+        }
+      }
       this.submitForm();
     },
-    async submitForm() {
+    submitForm() {
       const { dispatch } = this.$store;
       const { form } = this;
 
@@ -153,24 +244,19 @@ export default {
           this.edit = false;
         });
       } else {
-        await dispatch("serenazgos/addSerenazgo", form).then(() => {
+        dispatch("serenazgos/addSerenazgo", form).then(() => {
           this.$nextTick(() => {
             this.$bvModal.hide("modal-usuario");
           });
           this.showToast("Se agrago un nuevo usuario", "check", "success");
         });
       }
-      this.form = {
-        first_name: "",
-        last_name: "",
-        password: "",
-        username: "",
-      };
     },
     editModal(item) {
       this.form.first_name = item.first_name;
       this.form.last_name = item.last_name;
       this.form.username = item.email;
+      this.form.id = item.id;
       this.edit = true;
       this.updateId = item.id;
       this.$bvModal.show("modal-usuario");
