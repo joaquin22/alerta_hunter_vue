@@ -6,16 +6,7 @@ const state = {
     serenazgos: [],
 }
 
-const getters = {
-    serenazgoDuplicado: (state) => (obj) => {
-
-        const user = state.serenazgos.find((v) => v.username == obj.username && v.id != obj.id)
-        if (user) return true;
-        else return false
-    }
-
-
-};
+const getters = {};
 
 const actions = {
     getSerenazgos({
@@ -33,13 +24,16 @@ const actions = {
     addSerenazgo({
         commit
     }, datos) {
-        serenazgoService.addSerenazgo(datos).then(
-            usuario => {
-                commit('addSerenazgo', usuario);
-            }, error => {
-                console.log(error)
-            }
-        )
+        return new Promise((resolve, reject) => {
+            serenazgoService.addSerenazgo(datos).then(
+                usuario => {
+                    commit('addSerenazgo', usuario);
+                    resolve(usuario);
+                }, err => {
+                    reject(err)
+                }
+            )
+        })
     },
     deleteSerenazgo({
         commit
@@ -55,13 +49,16 @@ const actions = {
     updateSerenazgo({
         commit
     }, payload) {
-        serenazgoService.updateSerenazgo(payload).then(
-            serenazgo => {
-                commit('updateSerenazgo', serenazgo);
-            }, error => {
-                console.log(error)
-            }
-        )
+        return new Promise((resolve, reject) => {
+            serenazgoService.updateSerenazgo(payload).then(
+                serenazgo => {
+                    commit('updateSerenazgo', serenazgo);
+                    resolve(serenazgo);
+                }, err => {
+                    reject(err)
+                }
+            )
+        })
     },
 };
 

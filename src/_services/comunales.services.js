@@ -5,11 +5,11 @@ import {
     apiUrl
 } from '../constants/config'
 
-export const serenazgoService = {
-    getSerenazgos,
-    addSerenazgo,
-    deleteSerenazgo,
-    updateSerenazgo
+export const comunalService = {
+    getComunales,
+    addComunales,
+    deleteComunal,
+    updateComunal
 };
 
 
@@ -29,14 +29,14 @@ function handleResponse(response) {
     });
 }
 
-function getSerenazgos() {
+function getComunales() {
     const requestOptions = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
     };
-    return fetch(`${apiUrl}/serenazgos/`, requestOptions)
+    return fetch(`${apiUrl}/comunales/`, requestOptions)
         .then(handleResponse)
         .then(users => {
             // login successful if there's a jwt token in the response
@@ -44,7 +44,7 @@ function getSerenazgos() {
         })
 }
 
-function addSerenazgo(datos) {
+function addComunales(datos) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -53,7 +53,7 @@ function addSerenazgo(datos) {
         body: JSON.stringify(datos)
     };
 
-    return fetch(`${apiUrl}/serenazgos/`, requestOptions)
+    return fetch(`${apiUrl}/comunales/`, requestOptions)
         .then(handleResponse)
         .then(users => {
             // login successful if there's a jwt token in the response
@@ -62,14 +62,14 @@ function addSerenazgo(datos) {
 }
 
 
-function deleteSerenazgo(id) {
+function deleteComunal(id) {
     const requestOptions = {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
     };
-    return fetch(`${apiUrl}/serenazgos/${id}/`, requestOptions)
+    return fetch(`${apiUrl}/comunales/${id}/`, requestOptions)
         .then(handleResponse)
         .then(users => {
             // login successful if there's a jwt token in the response
@@ -77,7 +77,7 @@ function deleteSerenazgo(id) {
         })
 }
 
-function updateSerenazgo(payload) {
+function updateComunal(payload) {
     const requestOptions = {
         method: 'PATCH',
         headers: {
@@ -85,7 +85,7 @@ function updateSerenazgo(payload) {
         },
         body: JSON.stringify(payload.datos)
     };
-    return fetch(`${apiUrl}/serenazgos/${payload.id}/`, requestOptions)
+    return fetch(`${apiUrl}/comunales/${payload.id}/`, requestOptions)
         .then(handleResponse)
         .then(users => {
             // login successful if there's a jwt token in the response

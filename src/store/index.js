@@ -14,6 +14,7 @@ import incidentes from './modules/incidentes';
 import marcadores from './modules/marcadores';
 import serenazgos from './modules/serenazgos';
 import ciudadanos from './modules/ciudadanos';
+import comunales from './modules/comunales';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -30,5 +31,6 @@ export const store = new Vuex.Store({
     marcadores,
     serenazgos,
     ciudadanos,
+    comunales
   }
 });

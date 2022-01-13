@@ -13,7 +13,7 @@
                   v-b-modal.modal-usuario
                   class="btn btn-primary pull-right m-l-10"
                   @click="modal.title = 'Nuevo Serenazgo'"
-                >Añanir nuevo serenazgo</a>
+                >Añadir nuevo serenazgo</a>
               </h5>
             </div>
             <div class="card-body">
@@ -43,6 +43,13 @@
       @hidden="resetForm"
       @ok="handleOk"
     >
+      <b-alert
+        variant="danger"
+        dismissible
+        class="alert alert-danger dark alert-dismissible"
+        :show="error.value"
+        @dismissed="error.value=false"
+      >{{error.text}}</b-alert>
       <b-form @submit.stop.prevent="submitForm">
         <b-form-group id="input-nombre" label="Nombre:" label-for="nombres">
           <b-form-input
@@ -78,10 +85,6 @@
             v-if="!$v.form.username.required"
             id="input-2-live-feedback"
           >Este campo es obligatorio.</b-form-invalid-feedback>
-          <b-form-invalid-feedback
-            v-if="!$v.form.username.duplicados"
-            id="input-2-live-feedback"
-          >El email ingresado ya existe.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-password" label="Contraseña:" label-for="password">
@@ -103,16 +106,6 @@
 import { mapState } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { store } from "../../../store";
-
-// const mustBeCool = (value) => value.includes("cool");
-const duplicados = (value, params) => {
-  const obj = {
-    id: params.id,
-    username: value,
-  };
-  return !store.getters["serenazgos/serenazgoDuplicado"](obj);
-};
 
 export default {
   mixins: [validationMixin],
@@ -158,6 +151,10 @@ export default {
       },
       edit: false,
       updateId: 0,
+      error: {
+        value: false,
+        text: "",
+      },
     };
   },
   validations: {
@@ -173,7 +170,6 @@ export default {
       },
       username: {
         required,
-        duplicados,
       },
     },
   },
@@ -194,6 +190,7 @@ export default {
     resetForm() {
       this.edit = false;
       this.form = {
+        id: null,
         first_name: null,
         last_name: null,
         password: null,
@@ -214,7 +211,7 @@ export default {
 
       if (this.edit) {
         if (this.$v.form.$anyError) {
-          if (this.$v.form.username.$anyError) {
+          if (!this.$v.form.password.$anyError) {
             return;
           }
         }
@@ -236,20 +233,34 @@ export default {
         dispatch("serenazgos/updateSerenazgo", {
           id: this.updateId,
           datos: form,
-        }).then(() => {
-          this.$nextTick(() => {
-            this.$bvModal.hide("modal-usuario");
+        })
+          .then(() => {
+            this.$nextTick(() => {
+              this.$bvModal.hide("modal-usuario");
+            });
+            this.showToast("Se edito al usuario", "check", "success");
+            this.edit = false;
+          })
+          .catch(() => {
+            this.error = {
+              value: true,
+              text: "El correo ya se ha registrado",
+            };
           });
-          this.showToast("Se edito al usuario", "check", "success");
-          this.edit = false;
-        });
       } else {
-        dispatch("serenazgos/addSerenazgo", form).then(() => {
-          this.$nextTick(() => {
-            this.$bvModal.hide("modal-usuario");
+        dispatch("serenazgos/addSerenazgo", form)
+          .then(() => {
+            this.$nextTick(() => {
+              this.$bvModal.hide("modal-usuario");
+            });
+            this.showToast("Se agrago un nuevo usuario", "check", "success");
+          })
+          .catch((err) => {
+            this.error = {
+              value: true,
+              text: err.error[0],
+            };
           });
-          this.showToast("Se agrago un nuevo usuario", "check", "success");
-        });
       }
     },
     editModal(item) {
