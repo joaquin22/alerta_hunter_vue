@@ -4,7 +4,7 @@
     <b-card-text class="mb-0">
       Nombres: {{datos.nombre}}
       <br />
-      Nro. Documento: {{datos.id}}
+      Nro. Documento: {{datos.dni}}
       <br />
       Telefono: {{datos.telefono}}
       <br />

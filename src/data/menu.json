@@ -33,10 +33,16 @@
       "badgeValue": "2",
       "active": false,
       "children": [{
-        "path": "/app/marcadores",
-        "title": "Marcadores",
-        "type": "link"
-      }]
+          "path": "/app/marcadores",
+          "title": "Marcadores",
+          "type": "link"
+        },
+        {
+          "path": "/app/tipos-marcador",
+          "title": "Tipos de Marcadores",
+          "type": "link"
+        }
+      ]
     },
     {
       "path": "/app/alertas",

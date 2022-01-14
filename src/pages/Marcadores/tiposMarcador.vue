@@ -111,6 +111,8 @@ export default {
       modal: {
         title: "",
       },
+      edit: false,
+      updateId: 0,
     };
   },
   validations: {
@@ -142,18 +144,51 @@ export default {
     handleFileUpload(e) {
       this.form.imagen = e.target.files[0];
     },
-    submitForm(bvModalEvt) {
-      bvModalEvt.preventDefault();
+    submitForm() {
       const { dispatch } = this.$store;
       const { form } = this;
       let formData = new FormData();
       formData.append("tipo", form.tipo);
-      formData.append("imagen", form.imagen);
-      dispatch("marcadores/addTipoMarcadores", formData);
-      // console.log(formData);
-      // for (var key of formData.entries()) {
-      //   console.log(key[0] + ", " + key[1]);
-      // }
+      if (form.imagen) formData.append("imagen", form.imagen);
+
+      if (this.edit) {
+        dispatch("marcadores/updateTipoMarcador", {
+          id: this.updateId,
+          datos: formData,
+        });
+        this.showToast("Se edito correctamente", "check", "success");
+      } else {
+        dispatch("marcadores/addTipoMarcadores", formData);
+        this.showToast(
+          "Se agrego un nuevo Tipo de Marcador",
+          "check",
+          "success"
+        );
+      }
+    },
+    deleteModal(row) {
+      this.$swal({
+        text: `¿Esta seguro que desea elimnar a ${row.tipo} ?`,
+        showCancelButton: true,
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#4466f2",
+        cancelButtonText: "Cancelar",
+        cancelButtonColor: "#efefef",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.value) {
+          const { dispatch } = this.$store;
+          dispatch("marcadores/deleteTipoMarcador", row.id);
+          this.showToast("Se elimino correctamente", "trash", "error");
+        }
+      });
+    },
+    editModal(item) {
+      this.form.tipo = item.tipo;
+      this.edit = true;
+      this.updateId = item.id;
+      this.$bvModal.show("modal-6");
+      this.modal.title = "Editar Serenazgo";
     },
     showToast(mensaje, icono, type) {
       this.$toasted.show(mensaje, {

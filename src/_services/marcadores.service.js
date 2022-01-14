@@ -17,7 +17,9 @@ export const marcadoresService = {
     updateMarcador,
     deleteMarcador,
     getTipoMarcador,
-    addTipoMarcador
+    addTipoMarcador,
+    deleteTipoMarcador,
+    updateTipoMarcador
 };
 
 function getMarcadores() {
@@ -86,15 +88,40 @@ function getTipoMarcador() {
 }
 
 function addTipoMarcador(payload) {
-    const requestOptionsFormData = {
+    const requestOptions = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'multipart/form-data;boundary=----WebKitFormBoundaryyrV7KO0BoCBuDbTL'
-        },
         body: payload
     };
 
-    return fetch(`${apiUrl}/marcadores/tipos/crear/`, requestOptionsFormData)
+    return fetch(`${apiUrl}/marcadores/tipos/`, requestOptions)
+        .then(handleResponse)
+        .then(tipos => {
+            return tipos;
+        })
+}
+
+function deleteTipoMarcador(id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    };
+
+    return fetch(`${apiUrl}/marcadores/tipos/${id}/`, requestOptions)
+        .then(handleResponse)
+        .then(marcador => {
+            return marcador;
+        })
+}
+
+function updateTipoMarcador(payload) {
+    const requestOptions = {
+        method: 'PATCH',
+        body: payload.datos
+    };
+
+    return fetch(`${apiUrl}/marcadores/tipos/${payload.id}/`, requestOptions)
         .then(handleResponse)
         .then(tipos => {
             return tipos;

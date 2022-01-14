@@ -79,8 +79,29 @@ const actions = {
             }
         )
     },
-
+    deleteTipoMarcador({
+        commit
+    }, id) {
+        marcadoresService.deleteTipoMarcador(id).then(
+            () => {
+                commit('deleteTipoMarcador', id);
+            }
+        )
+    },
+    updateTipoMarcador({
+        commit
+    }, datos) {
+        marcadoresService.updateTipoMarcador(datos).then(
+            tipo => {
+                commit('updateTipoMarcador', tipo);
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    },
 };
+
 const mutations = {
     setMarcadores(state, marcadores) {
         state.marcadores = marcadores;
@@ -101,6 +122,14 @@ const mutations = {
     },
     addTipoMarcador(state, tipo) {
         state.tipos.push(tipo);
+    },
+    deleteTipoMarcador(state, id) {
+        const ItemIndex = state.tipos.findIndex((p) => p.id == id)
+        state.tipos.splice(ItemIndex, 1)
+    },
+    updateTipoMarcador(state, tipo) {
+        const ItemIndex = state.tipos.findIndex((p) => p.id == tipo.id)
+        Object.assign(state.tipos[ItemIndex], tipo)
     },
 };
 
