@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row user-cards">
         <div class="col-sm-12 col-xl-8">
-          <b-card header-tag="div">
+          <b-card header-tag="div" title="Mapa">
             <b-card-text class="mb-0">
               <markerMaps :marker="marker" :zoom="zoom" />
             </b-card-text>
@@ -12,16 +12,14 @@
         </div>
         <div class="col-sm-12 col-xl-4">
           <b-alert show variant="info" v-show="alertasExists">No hay mas alertas por atender</b-alert>
-
           <VuePerfectScrollbar class="scroll-area" :settings="settings6">
-            <alertas
-              v-for="a in alertas"
-              :key="a.id"
-              :datos="a"
-              @goMap="goMap"
-              @atendido="atendido"
-            />
+            <alertas v-for="a in alertas" :key="a.id" :datos="a" @goMap="goMap" @enviado="enviado" />
           </VuePerfectScrollbar>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-xl-8">
+          <b-card header-tag="div"></b-card>
         </div>
       </div>
     </div>
@@ -37,7 +35,7 @@ import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-const db = firebase.initializeApp({ projectId: "alerta-2056a" }).firestore();
+const db = firebase.initializeApp({ projectId: "hunter-seguro" }).firestore();
 
 export default {
   components: {
@@ -83,24 +81,22 @@ export default {
       this.marker = position;
       this.zoom = 15;
     },
-    atendido(id) {
+    enviado(id) {
       const { dispatch } = this.$store;
       const payload = {
         id: id,
         datos: { atendidoSerenazgo: true },
       };
       dispatch("incidentes/updateIncidentes", payload);
-      var jobskill_query = db.collection("incidentes").where("id", "==", id);
-      jobskill_query.get().then(function (querySnapshot) {
+      var docData = db.collection("incidentes").where("id", "==", id);
+      docData.get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
+          // db.collection("enviados").doc(doc.id).set(doc.data());
           doc.ref.delete();
         });
       });
     },
   },
-  //   firestore: {
-  //     alertas: db.collection("incidentes"),
-  //   },
 };
 </script>
 

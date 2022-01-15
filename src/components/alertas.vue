@@ -9,7 +9,7 @@
       Telefono: {{datos.telefono}}
       <br />
       Ubicación: {{datos.ubicacion}}
-      <b-button pill variant="primary" @click.stop="atendido">Atendido</b-button>
+      <b-button pill variant="primary" @click.stop="enviado">Enviado</b-button>
     </b-card-text>
   </b-card>
 </template>
@@ -42,8 +42,8 @@ export default {
       };
       this.$emit("goMap", position);
     },
-    atendido() {
-      this.$emit("atendido", this.datos.id);
+    enviado() {
+      this.$emit("enviado", this.datos.id);
     },
   },
 };
