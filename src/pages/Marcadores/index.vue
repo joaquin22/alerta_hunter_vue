@@ -21,7 +21,14 @@
               </h5>
             </div>
             <div class="card-body">
-              <b-table striped hover :items="marcadores" :fields="fields">
+              <b-table
+                striped
+                hover
+                :items="marcadores"
+                :fields="fields"
+                :current-page="currentPage"
+                :per-page="perPage"
+              >
                 <template #cell(actions)="row">
                   <b-button variant="danger" class="mb-3 mr-1" @click="deleteAlert(row.item)">
                     <i class="fa fa-trash pr-0"></i>
@@ -31,6 +38,14 @@
                   </b-button>
                 </template>
               </b-table>
+              <b-col md="6" class="p-0">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="marcadores.length"
+                  :per-page="perPage"
+                  class="my-0"
+                ></b-pagination>
+              </b-col>
             </div>
           </div>
         </div>
@@ -191,6 +206,8 @@ export default {
       },
       isMapa: true,
       error: false,
+      currentPage: 1,
+      perPage: 10,
     };
   },
   validations: {

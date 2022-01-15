@@ -19,6 +19,13 @@
       ]
     },
     {
+      "path": "/app/ciudadanos",
+      "title": "Ciudadanos",
+      "icon": "user",
+      "type": "link",
+      "active": false
+    },
+    {
       "path": "/app/incidentes",
       "title": "Tipos de Incidentes",
       "icon": "git-pull-request",
@@ -47,6 +54,27 @@
     {
       "path": "/app/alertas",
       "title": "Alertas",
+      "icon": "map",
+      "type": "link",
+      "active": false
+    },
+    {
+      "path": "/app/alertas-list",
+      "title": "Listado de Incidente",
+      "icon": "map",
+      "type": "link",
+      "active": false
+    },
+    {
+      "path": "/app/Personal",
+      "title": "Personal",
+      "icon": "map",
+      "type": "link",
+      "active": false
+    },
+    {
+      "path": "/app/unidad",
+      "title": "Unidad",
       "icon": "map",
       "type": "link",
       "active": false

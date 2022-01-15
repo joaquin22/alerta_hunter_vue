@@ -3,7 +3,8 @@ import {
 } from '../../_services';
 
 const state = {
-    tipoIncidentes: []
+    tipoIncidentes: [],
+    incidentes: []
 }
 
 const getters = {
@@ -62,6 +63,18 @@ const actions = {
     updateIncidentes(_, payload) {
         incidenteService.updateIncidentes(payload)
     },
+    getIncidentes({
+        commit
+    }) {
+        incidenteService.getIncidentes().then(
+            incidentes => {
+                commit('setIncidentes', incidentes);
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    },
 };
 
 const mutations = {
@@ -79,6 +92,9 @@ const mutations = {
         const ItemIndex = state.tipoIncidentes.findIndex((p) => p.id == id)
         state.tipoIncidentes.splice(ItemIndex, 1)
     },
+    setIncidentes(state, incidentes) {
+        state.incidentes = incidentes
+    }
 };
 
 

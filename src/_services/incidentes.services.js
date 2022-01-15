@@ -10,7 +10,8 @@ export const incidenteService = {
     addTipoIncidentes,
     deleteTipoIncidentes,
     updateTipoIncidentes,
-    updateIncidentes
+    updateIncidentes,
+    getIncidentes
 };
 
 function getTipoIncidentes() {
@@ -87,6 +88,21 @@ function updateIncidentes(payload) {
         .then(handleResponse)
         .then(tipos => {
             return tipos;
+        })
+}
+
+function getIncidentes(payload) {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    };
+
+    return fetch(`${apiUrl}/incidentes/`, requestOptions)
+        .then(handleResponse)
+        .then(incidentes => {
+            return incidentes;
         })
 }
 

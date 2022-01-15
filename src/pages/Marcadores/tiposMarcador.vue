@@ -17,7 +17,14 @@
               </h5>
             </div>
             <div class="card-body">
-              <b-table striped hover :items="tipos" :fields="fields">
+              <b-table
+                striped
+                hover
+                :items="tipos"
+                :fields="fields"
+                :current-page="currentPage"
+                :per-page="perPage"
+              >
                 <template #cell(imagen)="row">
                   <b-img
                     v-bind="mainProps"
@@ -35,6 +42,14 @@
                   </b-button>
                 </template>
               </b-table>
+              <b-col md="6" class="p-0">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="tipos.length"
+                  :per-page="perPage"
+                  class="my-0"
+                ></b-pagination>
+              </b-col>
             </div>
           </div>
         </div>
@@ -113,6 +128,8 @@ export default {
       },
       edit: false,
       updateId: 0,
+      currentPage: 1,
+      perPage: 10,
     };
   },
   validations: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs title="Tipos de Incidentes" />
+    <Breadcrumbs title="Unidad" />
     <!-- Container-fluid starts-->
     <div class="container-fluid">
       <div class="row">
@@ -8,36 +8,38 @@
           <div class="card">
             <div class="card-header">
               <h5>
-                Incidentes
+                Unidad
                 <a
                   v-b-modal.modal-6
                   class="btn btn-primary pull-right m-l-10"
-                  @click="modal.title = 'Nuevo Tipo de Incidente'"
-                >Añadir nuevo Tipo de Incidente</a>
+                  @click="modal.title = 'Nueva Unidad'"
+                >Añadir nueva Unidad</a>
               </h5>
             </div>
             <div class="card-body">
-              <b-table
-                striped
-                hover
-                :items="incidentes"
-                :fields="fields"
-                :current-page="currentPage"
-                :per-page="perPage"
-              >
-                <template #cell(actions)="row">
-                  <b-button variant="danger" class="mb-3 mr-1" @click="deleteModal(row.item)">
-                    <i class="fa fa-trash pr-0"></i>
-                  </b-button>
-                  <b-button variant="primary" class="mb-3 mr-1" @click="editModal(row.item)">
-                    <i class="fa fa-pencil pr-0"></i>
-                  </b-button>
-                </template>
-              </b-table>
-              <b-col md="6" class="p-0">
+              <div class="table-responsive datatable-vue">
+                <b-table
+                  striped
+                  hover
+                  :items="unidad"
+                  :fields="fields"
+                  :current-page="currentPage"
+                  :per-page="perPage"
+                >
+                  <template #cell(actions)="row">
+                    <b-button variant="danger" class="mb-3 mr-1" @click="deleteModal(row.item)">
+                      <i class="fa fa-trash pr-0"></i>
+                    </b-button>
+                    <b-button variant="primary" class="mb-3 mr-1" @click="editModal(row.item)">
+                      <i class="fa fa-pencil pr-0"></i>
+                    </b-button>
+                  </template>
+                </b-table>
+              </div>
+              <b-col md="6" class="p-0 mt-5">
                 <b-pagination
                   v-model="currentPage"
-                  :total-rows="incidentes.length"
+                  :total-rows="unidad.length"
                   :per-page="perPage"
                   class="my-0"
                 ></b-pagination>
@@ -58,35 +60,26 @@
       @ok="submitForm"
     >
       <b-form>
-        <b-form-group id="input-titulo" label="Titulo:" label-for="titulo">
+        <b-form-group id="input-numero" label="Número:" label-for="numero">
           <b-form-input
-            :state="validateState('titulo')"
-            id="titulo"
+            :state="validateState('numero')"
+            id="numero"
             type="text"
-            placeholder="Nombre"
-            v-model="form.titulo"
+            placeholder="Movil 01"
+            v-model="form.numero"
           ></b-form-input>
-          <b-form-invalid-feedback id="input-2-live-feedback">Falta el nombre del incidente.</b-form-invalid-feedback>
+          <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="input-area" label="Area:" label-for="area">
-          <b-form-select
-            :state="validateState('area')"
-            id="area"
-            v-model="form.area"
-            :options="tipoArea"
-          ></b-form-select>
-          <b-form-invalid-feedback id="input-2-live-feedback">Seleccione un area.</b-form-invalid-feedback>
-        </b-form-group>
-
-        <b-form-group id="input-nivel" label="Nivel:" label-for="nivel">
-          <b-form-select
-            :state="validateState('nivel')"
-            id="nivel"
-            v-model="form.nivel"
-            :options="niveles"
-          ></b-form-select>
-          <b-form-invalid-feedback id="input-2-live-feedback">Seleccione un nivel.</b-form-invalid-feedback>
+        <b-form-group id="input-placa" label="Placa:" label-for="placa">
+          <b-form-input
+            :state="validateState('placa')"
+            id="placa"
+            type="text"
+            placeholder="00-0000"
+            v-model="form.placa"
+          ></b-form-input>
+          <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
       </b-form>
     </b-modal>
@@ -103,19 +96,9 @@ export default {
   data() {
     return {
       form: {
-        titulo: null,
-        area: null,
-        nivel: null,
+        numero: null,
+        placa: null,
       },
-      tipoArea: [
-        { value: "SERENAZGO", text: "Serenazgo" },
-        { value: "COMUNAL", text: "Comunal" },
-      ],
-      niveles: [
-        { value: "BAJA", text: "Baja" },
-        { value: "MEDIA", text: "Media" },
-        { value: "ALTA", text: "Alta" },
-      ],
       fields: [
         {
           key: "id",
@@ -124,20 +107,14 @@ export default {
           sortDirection: "desc",
         },
         {
-          key: "titulo",
-          label: "Nombre",
+          key: "numero",
+          label: "Número",
           sortable: true,
           sortDirection: "desc",
         },
         {
-          key: "area",
-          label: "Area",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "nivel",
-          label: "Nivel",
+          key: "placa",
+          label: "Placa",
           sortable: true,
           sortDirection: "desc",
         },
@@ -154,20 +131,17 @@ export default {
   },
   validations: {
     form: {
-      titulo: {
+      numero: {
         required,
       },
-      area: {
-        required,
-      },
-      nivel: {
+      placa: {
         required,
       },
     },
   },
   computed: {
     ...mapState({
-      incidentes: (state) => state.incidentes.tipoIncidentes,
+      unidad: (state) => state.unidad.unidad,
     }),
   },
   created() {
@@ -180,9 +154,8 @@ export default {
     },
     resetForm() {
       this.form = {
-        titulo: null,
-        area: null,
-        nivel: null,
+        numero: null,
+        placa: null,
       };
 
       this.$nextTick(() => {
@@ -191,7 +164,7 @@ export default {
     },
     getData() {
       const { dispatch } = this.$store;
-      dispatch("incidentes/getTipoIncidentes");
+      dispatch("unidad/getUnidad");
     },
     submitForm(bvModalEvt) {
       bvModalEvt.preventDefault();
@@ -202,13 +175,13 @@ export default {
       const { dispatch } = this.$store;
       const { form } = this;
       if (this.edit) {
-        dispatch("incidentes/updateTipoIncidentes", {
+        dispatch("unidad/updateUnidad", {
           id: this.updateId,
           datos: form,
         }).then(() => {
           this.resetForm();
           this.showToast(
-            "Se edito correctamente el tipo de Incidente",
+            "Se edito correctamente el unidad",
             "check",
             "success"
           );
@@ -218,10 +191,10 @@ export default {
           });
         });
       } else {
-        dispatch("incidentes/addTipoIncidentes", form).then(() => {
+        dispatch("unidad/addUnidad", form).then(() => {
           this.resetForm();
           this.showToast(
-            "Se agrego correctamente el tipo de Incidente",
+            "Se agrego correctamente el unidad",
             "check",
             "success"
           );
@@ -233,7 +206,7 @@ export default {
     },
     deleteModal(row) {
       this.$swal({
-        text: `¿Esta seguro que desea elimnar a ${row.titulo} ?`,
+        text: `¿Esta seguro que desea elimnar a ${row.numero} ?`,
         showCancelButton: true,
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#4466f2",
@@ -243,17 +216,15 @@ export default {
       }).then((result) => {
         if (result.value) {
           const { dispatch } = this.$store;
-          dispatch("incidentes/deleteTipoIncidentes", row.id);
+          dispatch("unidad/deleteUnidad", row.id);
           this.showToast("Se elimino correctamente", "trash", "error");
         }
       });
     },
     editModal(item) {
-      console.log("QQQ");
-      this.modal.title = "Editar Tipo de Incidente";
-      this.form.titulo = item.titulo;
-      this.form.area = item.area;
-      this.form.nivel = item.nivel;
+      this.modal.title = "Editar Unidad";
+      this.form.numero = item.numero;
+      this.form.placa = item.placa;
       this.updateId = item.id;
       this.$bvModal.show("modal-6");
       this.edit = true;

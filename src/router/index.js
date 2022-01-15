@@ -11,10 +11,13 @@ import login from '../auth/login';
 import Serenazgo from '../pages/Usuarios/Serenazgo'
 import Comunal from '../pages/Usuarios/Comunal'
 import Ciudadanos from '../pages/Usuarios/Ciudadanos'
+import Personal from '../pages/Usuarios/Personal'
+import Unidad from '../pages/Usuarios/Unidad'
 import Incidentes from '../pages/Incidentes'
 import Marcadores from '../pages/Marcadores'
 import TipoMarcadores from '../pages/Marcadores/tiposMarcador'
 import Alertas from '../pages/Alertas'
+import AlertasList from '../pages/Alertas/list'
 // component
 
 Vue.use(Router)
@@ -82,11 +85,35 @@ const routes = [{
         }
       },
       {
+        path: 'alertas-list',
+        component: AlertasList,
+        name: 'incidencias',
+        meta: {
+          title: 'Hunter Seguro | Incidencias',
+        }
+      },
+      {
         path: 'ciudadanos',
         component: Ciudadanos,
         name: 'ciudadanos',
         meta: {
           title: 'Hunter Seguro | Ciudadanos',
+        }
+      },
+      {
+        path: 'personal',
+        component: Personal,
+        name: 'personal',
+        meta: {
+          title: 'Hunter Seguro | Personal',
+        }
+      },
+      {
+        path: 'unidad',
+        component: Unidad,
+        name: 'unidad',
+        meta: {
+          title: 'Hunter Seguro | Unidad',
         }
       }
     ]

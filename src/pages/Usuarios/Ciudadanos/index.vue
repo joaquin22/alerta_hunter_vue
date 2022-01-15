@@ -10,7 +10,51 @@
               <h5>Ciudadanos</h5>
             </div>
             <div class="card-body">
-              <b-table striped hover :items="usuarios"></b-table>
+              <vuetable
+                ref="vuetable"
+                :api-url="apiBase"
+                :query-params="makeQueryParams"
+                :per-page="perPage"
+                :reactive-api-url="true"
+                :fields="fields"
+                pagination-path
+                :row-class="onRowClass"
+                @vuetable:pagination-data="onPaginationData"
+                @vuetable:row-clicked="rowClicked"
+                @vuetable:cell-rightclicked="rightClicked"
+              >
+                <template slot="actions" slot-scope="props">
+                  <b-button
+                    variant="outline-primary"
+                    v-b-tooltip.hover
+                    title="Ver"
+                    @click="showModal(props)"
+                  >
+                    <i class="simple-icon-eye"></i>
+                  </b-button>
+                  <b-button
+                    variant="outline-success"
+                    v-b-tooltip.hover
+                    title="Editar"
+                    :to="{name:'editar',params:{personalId:props.rowData.id}}"
+                  >
+                    <i class="simple-icon-pencil"></i>
+                  </b-button>
+                  <b-button
+                    variant="outline-danger"
+                    v-b-tooltip.hover
+                    title="Eliminar"
+                    @click="deleteModal(props)"
+                  >
+                    <i class="simple-icon-trash"></i>
+                  </b-button>
+                </template>
+              </vuetable>
+              <vuetable-pagination-bootstrap
+                class="mt-4"
+                ref="pagination"
+                @vuetable-pagination:change-page="onChangePage"
+              />
             </div>
           </div>
         </div>
@@ -20,30 +64,168 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { apiUrl } from "../../../constants/config";
+import Vuetable from "vuetable-2/src/components/Vuetable";
+import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
 export default {
+  components: {
+    vuetable: Vuetable,
+    "vuetable-pagination-bootstrap": VuetablePaginationBootstrap,
+  },
   data() {
     return {
-      currentPage: 1,
+      isLoad: false,
+      apiBase: apiUrl + "/ciudadanos/",
+      sort: "",
+      page: 1,
       perPage: 10,
+      search: "",
+      from: 0,
+      to: 0,
+      total: 0,
+      lastPage: 0,
+      items: [],
+      selectedItems: [],
+      fields: [
+        {
+          name: "id",
+          title: "ID",
+          titleClass: "",
+        },
+        {
+          name: "nombreCompleto",
+          title: "Nombres",
+          titleClass: "",
+        },
+        {
+          name: "telefono",
+          title: "Telefono",
+          titleClass: "",
+        },
+        {
+          name: "direccion",
+          title: "Dirección",
+          titleClass: "",
+        },
+        {
+          name: "dni",
+          title: "DNI",
+          titleClass: "",
+        },
+      ],
     };
   },
   computed: {
-    ...mapState({
-      usuarios: (state) => state.ciudadanos.ciudadanos,
-    }),
+    isSelectedAll() {
+      return this.selectedItems.length >= this.items.length;
+    },
+    isAnyItemSelected() {
+      return (
+        this.selectedItems.length > 0 &&
+        this.selectedItems.length < this.items.length
+      );
+    },
   },
-  created() {
-    this.getData();
-  },
+  created() {},
   methods: {
-    getData() {
-      const { dispatch } = this.$store;
-      const payload = {
-        currentPage: this.currentPage,
-        perPage: this.perPage,
-      };
-      dispatch("ciudadanos/getCiudadanos", payload);
+    onPaginationData(paginationData) {
+      this.$refs.pagination.setPaginationData(paginationData);
+    },
+    onChangePage(page) {
+      this.$refs.vuetable.changePage(page);
+    },
+    makeQueryParams(sortOrder, currentPage, perPage) {
+      this.selectedItems = [];
+      return sortOrder[0]
+        ? {
+            sort: sortOrder[0]
+              ? sortOrder[0].field + "|" + sortOrder[0].direction
+              : "",
+            page: currentPage,
+            per_page: this.perPage,
+            search: this.search,
+          }
+        : {
+            page: currentPage,
+            per_page: this.perPage,
+            search: this.search,
+          };
+    },
+    onRowClass(dataItem, index) {
+      if (this.selectedItems.includes(dataItem.id)) {
+        return "selected";
+      }
+      return "";
+    },
+
+    rowClicked(dataItem, event) {
+      const itemId = dataItem.id;
+      if (event.shiftKey && this.selectedItems.length > 0) {
+        let itemsForToggle = this.items;
+        var start = this.getIndex(itemId, itemsForToggle, "id");
+        var end = this.getIndex(
+          this.selectedItems[this.selectedItems.length - 1],
+          itemsForToggle,
+          "id"
+        );
+        itemsForToggle = itemsForToggle.slice(
+          Math.min(start, end),
+          Math.max(start, end) + 1
+        );
+        this.selectedItems.push(
+          ...itemsForToggle.map((item) => {
+            return item.id;
+          })
+        );
+        this.selectedItems = [...new Set(this.selectedItems)];
+      } else {
+        if (this.selectedItems.includes(itemId)) {
+          this.selectedItems = this.selectedItems.filter((x) => x !== itemId);
+        } else this.selectedItems.push(itemId);
+      }
+    },
+    rightClicked(dataItem, field, event) {
+      event.preventDefault();
+      if (!this.selectedItems.includes(dataItem.id)) {
+        this.selectedItems = [dataItem.id];
+      }
+      this.$refs.contextmenu.show({ top: event.pageY, left: event.pageX });
+    },
+
+    changePageSize(perPage) {
+      this.perPage = perPage;
+      this.$refs.vuetable.refresh();
+    },
+
+    searchChange(val) {
+      this.search = val;
+      this.$refs.vuetable.refresh();
+    },
+
+    selectAll(isToggle) {
+      if (this.selectedItems.length >= this.items.length) {
+        if (isToggle) this.selectedItems = [];
+      } else {
+        this.selectedItems = this.items.map((x) => x.id);
+      }
+    },
+    keymap(event) {
+      switch (event.srcKey) {
+        case "select":
+          this.selectAll(false);
+          break;
+        case "undo":
+          this.selectedItems = [];
+          break;
+      }
+    },
+    getIndex(value, arr, prop) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][prop] === value) {
+          return i;
+        }
+      }
+      return -1;
     },
   },
 };
