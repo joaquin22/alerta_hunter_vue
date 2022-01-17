@@ -11,10 +11,44 @@
           </b-card>
         </div>
         <div class="col-sm-12 col-xl-4">
-          <b-alert show variant="info" v-show="alertasExists">No hay mas alertas por atender</b-alert>
-          <VuePerfectScrollbar class="scroll-area" :settings="settings6">
-            <alertas v-for="a in alertas" :key="a.id" :datos="a" @goMap="goMap" @enviado="enviado" />
-          </VuePerfectScrollbar>
+          <b-alert :show="alertasExists" variant="info">No hay mas alertas por atender</b-alert>
+          <b-card no-body>
+            <b-tabs card>
+              <b-tab no-body title="Alertas">
+                <VuePerfectScrollbar class="scroll-area" :settings="settings6">
+                  <b-list-group>
+                    <alertas
+                      v-for="a in alertas"
+                      :key="a.id"
+                      :datos="a"
+                      @goMap="goMap"
+                      @enviado="enviado"
+                      @bloquear="bloquear"
+                      @fuera="fuera"
+                    />
+                  </b-list-group>
+                </VuePerfectScrollbar>
+              </b-tab>
+
+              <b-tab no-body title="Enviados">
+                <VuePerfectScrollbar class="scroll-area" :settings="settings6">
+                  <b-list-group>
+                    <alertas
+                      v-for="a in enviados"
+                      :key="a.id"
+                      :datos="a"
+                      :enviados="true"
+                      @goMap="goMap"
+                      @enviado="enviado"
+                      @atendido="atendido"
+                      @bloquear="bloquear"
+                      @fuera="fuera"
+                    />
+                  </b-list-group>
+                </VuePerfectScrollbar>
+              </b-tab>
+            </b-tabs>
+          </b-card>
         </div>
       </div>
       <div class="row">
@@ -49,6 +83,7 @@ export default {
         maxScrollbarLength: 60,
       },
       alertas: [],
+      enviados: [],
       marker: {
         lat: -16.440132,
         lng: -71.559042,
@@ -64,6 +99,7 @@ export default {
   },
   created() {
     this.getIncidentes();
+    this.getEnviados();
   },
   methods: {
     getIncidentes() {
@@ -77,6 +113,17 @@ export default {
           });
         });
     },
+    getEnviados() {
+      db.collection("enviados")
+        .orderBy("id", "desc")
+        .onSnapshot((querySnapshot) => {
+          this.enviados = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            this.enviados.push(data);
+          });
+        });
+    },
     goMap(position) {
       this.marker = position;
       this.zoom = 15;
@@ -85,13 +132,50 @@ export default {
       const { dispatch } = this.$store;
       const payload = {
         id: id,
-        datos: { atendidoSerenazgo: true },
+        datos: { estado: "ENVIADO" },
       };
       dispatch("incidentes/updateIncidentes", payload);
-      var docData = db.collection("incidentes").where("id", "==", id);
+      this.eliminarFireStore(id, "incidentes", true);
+    },
+    atendido(id) {
+      const { dispatch } = this.$store;
+      const payload = {
+        id: id,
+        datos: { estado: "ATENDIDO", atendidoSerenazgo: true },
+      };
+      dispatch("incidentes/updateIncidentes", payload);
+      this.eliminarFireStore(id, "enviados");
+    },
+    bloquear(usuarioId, id) {
+      const { dispatch } = this.$store;
+      const payloadUser = {
+        id: usuarioId,
+        datos: { estado: "BLOQUEADO" },
+      };
+      dispatch("ciudadanos/updateCiudadanos", payloadUser);
+      const payload = {
+        id: id,
+        datos: { estado: "CERRADO" },
+      };
+      dispatch("incidentes/updateIncidentes", payload);
+      this.eliminarFireStore(id, "incidentes");
+    },
+    fuera(id) {
+      const { dispatch } = this.$store;
+      const payload = {
+        id: id,
+        datos: { estado: "FUERA_JURISDICCION" },
+      };
+      dispatch("incidentes/updateIncidentes", payload);
+      this.eliminarFireStore(id, "incidentes");
+    },
+    eliminarFireStore(id, collection, mover = false) {
+      var docData = db.collection(collection).where("id", "==", id);
       docData.get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          // db.collection("enviados").doc(doc.id).set(doc.data());
+          if (mover) {
+            db.collection("enviados").doc(doc.id).set(doc.data());
+          }
           doc.ref.delete();
         });
       });

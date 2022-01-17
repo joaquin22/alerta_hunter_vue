@@ -11,9 +11,7 @@ import {
 export const userService = {
     login,
     logout,
-    getAll,
-    getComunales,
-    addComunal
+
 };
 
 function login(username, password) {
@@ -46,20 +44,13 @@ function login(username, password) {
         })
 }
 
+
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
     localStorage.removeItem('token');
 }
 
-function getAll() {
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-
-    return fetch(`http://localhost:8080/users`, requestOptions).then(handleResponse);
-}
 
 function handleResponse(response) {
     return response.text().then(text => {
@@ -76,37 +67,4 @@ function handleResponse(response) {
 
         return data;
     });
-}
-
-
-function getComunales() {
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    };
-    return fetch(`${apiUrl}/usuarios/comunal/`, requestOptions)
-        .then(handleResponse)
-        .then(users => {
-            // login successful if there's a jwt token in the response
-            return users;
-        })
-}
-
-function addComunal(datos) {
-    console.log(datos)
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos)
-    };
-    return fetch(`${apiUrl}/usuarios/comunal/`, requestOptions)
-        .then(handleResponse)
-        .then(users => {
-            // login successful if there's a jwt token in the response
-            return users;
-        })
 }

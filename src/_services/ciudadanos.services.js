@@ -7,6 +7,7 @@ import {
 
 export const ciudadanosService = {
     getCiudadanos,
+    updateCiudadanos
 
 };
 
@@ -35,6 +36,22 @@ function getCiudadanos(payload) {
         },
     };
     return fetch(`${apiUrl}/ciudadanos/?page=${payload.currentPage}&per_page=${payload.perPage}`, requestOptions)
+        .then(handleResponse)
+        .then(users => {
+            // login successful if there's a jwt token in the response
+            return users;
+        })
+}
+
+function updateCiudadanos(payload) {
+    const requestOptions = {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload.datos)
+    };
+    return fetch(`${apiUrl}/ciudadanos/${payload.id}/`, requestOptions)
         .then(handleResponse)
         .then(users => {
             // login successful if there's a jwt token in the response

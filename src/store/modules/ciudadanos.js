@@ -23,6 +23,9 @@ const actions = {
             }
         )
     },
+    updateCiudadanos(_, payload) {
+        ciudadanosService.updateCiudadanos(payload)
+    },
 
 };
 

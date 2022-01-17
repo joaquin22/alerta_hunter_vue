@@ -30,7 +30,7 @@ Vue.use(Toasted, {
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyCdXpLSJ3Ibdu-Phs9QOvpqb9d1DtPf7wQ',
+    key: 'AIzaSyDp8zywv1pugxOnKim2pHGFRTfO_t0qo3Q',
     libraries: 'places',
   },
 });
