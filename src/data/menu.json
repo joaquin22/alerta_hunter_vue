@@ -74,7 +74,7 @@
     },
     {
       "path": "/app/unidad",
-      "title": "Unidad",
+      "title": "Unidades",
       "icon": "map",
       "type": "link",
       "active": false
