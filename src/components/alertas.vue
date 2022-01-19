@@ -8,7 +8,7 @@
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">{{datos.tipo}}</h5>
       <small class="text-muted">
-        <b-button variant="primary" v-if="enviados" @click.stop="confimacion('atendido')">Atendido</b-button>
+        <b-button variant="primary" v-if="enviados" @click.stop="atendido">Atendido</b-button>
         <b-dropdown variant="primary" id="dropdown-1" text="Acciones" size="sm" right v-else>
           <b-dropdown-item @click.stop="confimacion('enviado')">Enviado</b-dropdown-item>
           <b-dropdown-item @click.stop="confimacion('fuera')">Fuera de Jurisdicción</b-dropdown-item>

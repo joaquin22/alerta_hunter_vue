@@ -7,7 +7,12 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <h5>Incidentes</h5>
+              <h5>
+                Incidentes
+                <json-excel :data="incidentes" :fields="json_fields">
+                  <a class="btn btn-primary pull-right m-l-10">Exportar Excel</a>
+                </json-excel>
+              </h5>
             </div>
             <div class="card-body">
               <div class="table-responsive datatable-vue">
@@ -39,8 +44,12 @@
 
 <script>
 import { mapState } from "vuex";
+import JsonExcel from "vue-json-excel";
 
 export default {
+  components: {
+    JsonExcel,
+  },
   data() {
     return {
       tablefields: [
@@ -52,14 +61,8 @@ export default {
           sortDirection: "desc",
         },
         {
-          key: "fecha",
+          key: "fechaCreacion",
           label: "Fecha",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "hora",
-          label: "Hora",
           sortable: true,
           sortDirection: "desc",
         },
@@ -76,6 +79,12 @@ export default {
           sortDirection: "desc",
         },
       ],
+      json_fields: {
+        ID: "id",
+        Ciudadano: "ciudadanoNombre",
+        Fecha: "fechaCreacion",
+        "Tipo de Incidente": "tipoIncidente.titulo",
+      },
       currentPage: 1,
       perPage: 10,
     };
@@ -101,6 +110,7 @@ export default {
       const { dispatch } = this.$store;
       dispatch("incidentes/getIncidentes");
     },
+    exportar() {},
   },
 };
 </script>

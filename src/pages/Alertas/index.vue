@@ -58,10 +58,46 @@
       </div>
     </div>
     <!-- AÑADIR MARCADOR MODAL -->
+    <b-modal
+      id="modal-atendido"
+      title="Atendido"
+      cancel-title="Cancelar"
+      ok-title="Guardar"
+      class="theme-modal"
+      @ok="submitForm"
+    >
+      <b-form>
+        <b-form-group id="input-personal" label="Personal:" label-for="personal">
+          <b-form-select :options="personal" v-model="form.personalSeguridad">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
+          <b-form-select :options="unidad" v-model="form.unidad">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+        <b-form-group id="input-observacion" label="Observación:" label-for="observacion">
+          <b-form-textarea
+            id="observacion"
+            v-model="form.observacion"
+            placeholder="Observación"
+            rows="3"
+            max-rows="6"
+          ></b-form-textarea>
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import markerMaps from "@/components/Maps/markerMaps.vue";
 import alertas from "@/components/alertas.vue";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
@@ -79,6 +115,15 @@ export default {
   },
   data() {
     return {
+      form: {
+        id: null,
+        personalSeguridad: null,
+        unidad: null,
+        observacion: null,
+        estado: "ATENDIDO",
+        atendidoSerenazgo: true,
+        usuario: null,
+      },
       settings6: {
         maxScrollbarLength: 60,
       },
@@ -96,12 +141,28 @@ export default {
       if (this.alertas.length == 0) return true;
       else return false;
     },
+    ...mapState({
+      unidad: (state) => state.unidad.unidad,
+      personal: (state) => state.personal.personal,
+    }),
   },
   created() {
+    this.form.usuario = this.$store.state.authentication.user.id;
+    console.log(this.$store.state.authentication.user);
     this.getIncidentes();
     this.getEnviados();
+    this.getPersonal();
+    this.getUnidad();
   },
   methods: {
+    getPersonal() {
+      const { dispatch } = this.$store;
+      dispatch("personal/getPersonal");
+    },
+    getUnidad() {
+      const { dispatch } = this.$store;
+      dispatch("unidad/getUnidad");
+    },
     getIncidentes() {
       db.collection("incidentes")
         .orderBy("id", "desc")
@@ -138,13 +199,15 @@ export default {
       this.eliminarFireStore(id, "incidentes", true);
     },
     atendido(id) {
-      const { dispatch } = this.$store;
-      const payload = {
-        id: id,
-        datos: { estado: "ATENDIDO", atendidoSerenazgo: true },
-      };
-      dispatch("incidentes/updateIncidentes", payload);
-      this.eliminarFireStore(id, "enviados");
+      this.form.id = id;
+      this.$bvModal.show("modal-atendido");
+      // const { dispatch } = this.$store;
+      // const payload = {
+      //   id: id,
+      //   datos: { estado: "ATENDIDO", atendidoSerenazgo: true },
+      // };
+      // dispatch("incidentes/updateIncidentes", payload);
+      // this.eliminarFireStore(id, "enviados");
     },
     bloquear(usuarioId, id) {
       const { dispatch } = this.$store;
@@ -179,6 +242,17 @@ export default {
           doc.ref.delete();
         });
       });
+    },
+    submitForm() {
+      const { dispatch } = this.$store;
+      const { form } = this;
+      console.log(form);
+      const payload = {
+        id: form.id,
+        datos: form,
+      };
+      dispatch("incidentes/updateIncidentes", payload);
+      this.eliminarFireStore(form.id, "enviados");
     },
   },
 };
