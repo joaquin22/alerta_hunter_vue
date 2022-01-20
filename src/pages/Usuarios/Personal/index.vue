@@ -76,7 +76,7 @@
             :state="validateState('apellidos')"
             id="apellidos"
             type="text"
-            placeholder="Nombre"
+            placeholder="Apellidos"
             v-model="form.apellidos"
           ></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>

@@ -51,11 +51,6 @@
           </b-card>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-12 col-xl-8">
-          <b-card header-tag="div"></b-card>
-        </div>
-      </div>
     </div>
     <!-- AÑADIR MARCADOR MODAL -->
     <b-modal
