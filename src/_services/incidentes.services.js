@@ -11,7 +11,8 @@ export const incidenteService = {
     deleteTipoIncidentes,
     updateTipoIncidentes,
     updateIncidentes,
-    getIncidentes
+    getIncidentes,
+    addIncidente
 };
 
 function getTipoIncidentes() {
@@ -100,6 +101,22 @@ function getIncidentes(payload) {
     };
 
     return fetch(`${apiUrl}/incidentes/`, requestOptions)
+        .then(handleResponse)
+        .then(incidentes => {
+            return incidentes;
+        })
+}
+
+function addIncidente(datos) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    };
+
+    return fetch(`${apiUrl}/incidentes/web/`, requestOptions)
         .then(handleResponse)
         .then(incidentes => {
             return incidentes;

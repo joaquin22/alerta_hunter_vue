@@ -12,7 +12,6 @@
                 <json-excel :data="incidentes" :fields="json_fields">
                   <a class="btn btn-primary pull-right m-l-10">Exportar Excel</a>
                 </json-excel>
-                <a v-b-modal.modal-alertas class="btn btn-primary pull-right m-l-10">Añadir Nuevo</a>
               </h5>
             </div>
             <div class="card-body">
@@ -40,55 +39,6 @@
         </div>
       </div>
     </div>
-
-    <b-modal
-      id="modal-alertas"
-      title="Nuevo Incidentes"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-    >
-      <b-form>
-        <b-form-group id="input-nombres" label="Nombre Completo:" label-for="nombres">
-          <b-form-input id="nombres" type="text" placeholder="Nombre Completo"></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="input-dni" label="DNI:" label-for="dni">
-          <b-form-input id="dni" type="text" placeholder="DNI"></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="input-telefono" label="Telefono:" label-for="telefono">
-          <b-form-input id="telefono" type="text" placeholder="Telefono"></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="input-origen" label="Tipo de Origen:" label-for="origen">
-          <b-form-select :options="origen">
-            <template #first>
-              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
-            </template>
-          </b-form-select>
-        </b-form-group>
-
-        <b-form-group id="input-personal" label="Personal:" label-for="personal">
-          <b-form-select :options="personal">
-            <template #first>
-              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
-            </template>
-          </b-form-select>
-        </b-form-group>
-
-        <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
-          <b-form-select :options="unidad">
-            <template #first>
-              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
-            </template>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group id="input-observacion" label="Observación:" label-for="observacion">
-          <b-form-textarea id="observacion" placeholder="Observación" rows="3" max-rows="6"></b-form-textarea>
-        </b-form-group>
-      </b-form>
-    </b-modal>
   </div>
 </template>
 
@@ -105,7 +55,7 @@ export default {
       tablefields: [
         { key: "id", label: "ID", sortable: true, sortDirection: "desc" },
         {
-          key: "ciudadanoNombre",
+          key: "datosCiudadano.nombres",
           label: "Ciudadano",
           sortable: true,
           sortDirection: "desc",
@@ -149,20 +99,6 @@ export default {
       },
       currentPage: 1,
       perPage: 10,
-      origen: [
-        {
-          text: "Aplicativo",
-          value: "APLICATIVO",
-        },
-        {
-          text: "Telefonico",
-          value: "TELEFONICO",
-        },
-        {
-          text: "Patrullaje",
-          value: "PATRULLAJE",
-        },
-      ],
     };
   },
   computed: {
@@ -170,14 +106,10 @@ export default {
       incidentes: (state) => {
         return state.incidentes.incidentes;
       },
-      unidad: (state) => state.unidad.unidad,
-      personal: (state) => state.personal.personal,
     }),
   },
   created() {
     this.getData();
-    this.getPersonal();
-    this.getUnidad();
   },
   methods: {
     onPaginationData(paginationData) {
@@ -189,14 +121,6 @@ export default {
     getData() {
       const { dispatch } = this.$store;
       dispatch("incidentes/getIncidentes");
-    },
-    getPersonal() {
-      const { dispatch } = this.$store;
-      dispatch("personal/getPersonal");
-    },
-    getUnidad() {
-      const { dispatch } = this.$store;
-      dispatch("unidad/getUnidad");
     },
   },
 };

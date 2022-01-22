@@ -10,7 +10,7 @@
       <small class="text-muted">
         <b-button variant="primary" v-if="enviados" @click.stop="atendido">Atendido</b-button>
         <b-dropdown variant="primary" id="dropdown-1" text="Acciones" size="sm" right v-else>
-          <b-dropdown-item @click.stop="confimacion('enviado')">Enviado</b-dropdown-item>
+          <b-dropdown-item @click.stop="enviado">Enviado</b-dropdown-item>
           <b-dropdown-item @click.stop="confimacion('fuera')">Fuera de Jurisdicción</b-dropdown-item>
           <b-dropdown-item @click.stop="confimacion('bloquear')">Bloquear Usuario</b-dropdown-item>
         </b-dropdown>

@@ -23,32 +23,13 @@
                 @vuetable:row-clicked="rowClicked"
                 @vuetable:cell-rightclicked="rightClicked"
               >
-                <template slot="actions" slot-scope="props">
+                <div slot="actions" slot-scope="props">
                   <b-button
-                    variant="outline-primary"
-                    v-b-tooltip.hover
-                    title="Ver"
-                    @click="showModal(props)"
-                  >
-                    <i class="simple-icon-eye"></i>
-                  </b-button>
-                  <b-button
-                    variant="outline-success"
-                    v-b-tooltip.hover
-                    title="Editar"
-                    :to="{name:'editar',params:{personalId:props.rowData.id}}"
-                  >
-                    <i class="simple-icon-pencil"></i>
-                  </b-button>
-                  <b-button
-                    variant="outline-danger"
-                    v-b-tooltip.hover
-                    title="Eliminar"
-                    @click="deleteModal(props)"
-                  >
-                    <i class="simple-icon-trash"></i>
-                  </b-button>
-                </template>
+                    variant="primary"
+                    class="mb-3 mr-1"
+                    @click="desbloquear(props.rowData.id)"
+                  >Desbloquear</b-button>
+                </div>
               </vuetable>
               <vuetable-pagination-bootstrap
                 class="mt-4"
@@ -110,6 +91,16 @@ export default {
         {
           name: "dni",
           title: "DNI",
+          titleClass: "",
+        },
+        {
+          name: "estado",
+          title: "Estado",
+          titleClass: "",
+        },
+        {
+          name: "actions",
+          title: "Acciones",
           titleClass: "",
         },
       ],
@@ -226,6 +217,15 @@ export default {
         }
       }
       return -1;
+    },
+    desbloquear(id) {
+      const { dispatch } = this.$store;
+      const payload = {
+        id: id,
+        datos: { estado: "ACTIVO" },
+      };
+      dispatch("ciudadanos/updateCiudadanos", payload);
+      this.$refs.vuetable.refresh();
     },
   },
 };

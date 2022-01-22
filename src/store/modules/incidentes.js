@@ -18,6 +18,7 @@ const actions = {
         incidenteService.getTipoIncidentes().then(
             tipos => {
                 commit('setTipoIncidentes', tipos);
+
             },
             error => {
                 console.log(error);
@@ -74,6 +75,10 @@ const actions = {
                 console.log(error);
             }
         )
+    },
+    addIncidente(_, datos) {
+        incidenteService.addIncidente(datos)
+
     },
 };
 

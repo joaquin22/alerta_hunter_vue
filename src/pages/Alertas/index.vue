@@ -4,17 +4,28 @@
     <div class="container-fluid">
       <div class="row user-cards">
         <div class="col-sm-12 col-xl-8">
-          <b-card header-tag="div" title="Mapa">
+          <b-card header-tag="header">
+            <template #header>
+              <h4 class="mb-0">
+                Mapa
+                <a v-b-modal.modal-alertas class="btn btn-primary pull-right">Añadir Nuevo</a>
+              </h4>
+            </template>
             <b-card-text class="mb-0">
               <markerMaps :marker="marker" :zoom="zoom" />
             </b-card-text>
           </b-card>
         </div>
         <div class="col-sm-12 col-xl-4">
-          <b-alert :show="alertasExists" variant="info">No hay mas alertas por atender</b-alert>
           <b-card no-body>
             <b-tabs card>
-              <b-tab no-body title="Alertas">
+              <b-tab no-body>
+                <template #title>
+                  Alertas
+                  <label class="badge badge-primary">{{alertas.length}}</label>
+                </template>
+
+                <b-alert :show="alertas.length==0" variant="info">No hay mas alertas por atender</b-alert>
                 <VuePerfectScrollbar class="scroll-area" :settings="settings6">
                   <b-list-group>
                     <alertas
@@ -30,7 +41,12 @@
                 </VuePerfectScrollbar>
               </b-tab>
 
-              <b-tab no-body title="Enviados">
+              <b-tab no-body>
+                <template #title>
+                  Enviados
+                  <label class="badge badge-primary">{{enviados.length}}</label>
+                </template>
+                <b-alert :show="enviados.length==0" variant="info">No hay mas alertas</b-alert>
                 <VuePerfectScrollbar class="scroll-area" :settings="settings6">
                   <b-list-group>
                     <alertas
@@ -62,21 +78,6 @@
       @ok="submitForm"
     >
       <b-form>
-        <b-form-group id="input-personal" label="Personal:" label-for="personal">
-          <b-form-select :options="personal" v-model="form.personalSeguridad">
-            <template #first>
-              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
-            </template>
-          </b-form-select>
-        </b-form-group>
-
-        <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
-          <b-form-select :options="unidad" v-model="form.unidad">
-            <template #first>
-              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
-            </template>
-          </b-form-select>
-        </b-form-group>
         <b-form-group id="input-observacion" label="Observación:" label-for="observacion">
           <b-form-textarea
             id="observacion"
@@ -88,6 +89,107 @@
         </b-form-group>
       </b-form>
     </b-modal>
+
+    <!-- AÑADIR PERSONAL Y UNIDADES -->
+    <b-modal
+      id="modal-enviado"
+      title="Enviar Personal"
+      cancel-title="Cancelar"
+      ok-title="Guardar"
+      class="theme-modal"
+      @ok="enviarPersonal"
+    >
+      <b-form>
+        <b-form-group id="input-personal" label="Personal:" label-for="personal">
+          <b-form-select :options="personal" v-model="formPersonal.personalSeguridad">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
+          <b-form-select :options="unidad" v-model="formPersonal.unidad">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+      </b-form>
+    </b-modal>
+
+    <!-- AÑADIR NUEVO INCIDENTE MODAL -->
+
+    <b-modal
+      id="modal-alertas"
+      title="Nuevo Incidente"
+      cancel-title="Cancelar"
+      ok-title="Guardar"
+      class="theme-modal"
+      @ok="handleOk"
+    >
+      <b-form>
+        <b-form-group id="input-nombres" label="Nombre Completo:" label-for="nombres">
+          <b-form-input
+            id="nombres"
+            type="text"
+            placeholder="Nombre Completo"
+            v-model="formIncidente.nombres"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="input-dni" label="DNI:" label-for="dni">
+          <b-form-input id="dni" type="text" placeholder="DNI" v-model="formIncidente.dni"></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="input-telefono" label="Telefono:" label-for="telefono" required>
+          <b-form-input
+            :state="validateState('telefono')"
+            id="telefono"
+            type="text"
+            placeholder="Telefono"
+            v-model="formIncidente.telefono"
+          ></b-form-input>
+          <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-form-group id="input-origen" label="Tipo de Origen:" label-for="origen">
+          <b-form-select :options="origen" v-model="formIncidente.tipoOrigen">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-group
+          id="input-tipo-incidente"
+          label="Tipo de Incidente:"
+          label-for="tipo-incidente"
+        >
+          <b-form-select :options="incidentes" v-model="formIncidente.tipoIncidente">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-group id="input-personal" label="Personal:" label-for="personal">
+          <b-form-select :options="personal" v-model="formIncidente.personalSeguridad">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
+          <b-form-select :options="unidad" v-model="formIncidente.unidad">
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
@@ -96,6 +198,8 @@ import { mapState } from "vuex";
 import markerMaps from "@/components/Maps/markerMaps.vue";
 import alertas from "@/components/alertas.vue";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -103,6 +207,7 @@ import "firebase/firestore";
 const db = firebase.initializeApp({ projectId: "hunter-seguro" }).firestore();
 
 export default {
+  mixins: [validationMixin],
   components: {
     markerMaps,
     VuePerfectScrollbar,
@@ -110,14 +215,28 @@ export default {
   },
   data() {
     return {
-      form: {
-        id: null,
+      formIncidente: {
+        nombres: null,
+        dni: null,
+        telefono: null,
+        tipoOrigen: null,
         personalSeguridad: null,
         unidad: null,
+        estado: "ENVIADO",
+        tipoIncidente: null,
+      },
+      form: {
+        id: null,
         observacion: null,
         estado: "ATENDIDO",
         atendidoSerenazgo: true,
         usuario: null,
+      },
+      formPersonal: {
+        id: null,
+        personalSeguridad: null,
+        unidad: null,
+        estado: "ENVIADO",
       },
       settings6: {
         maxScrollbarLength: 60,
@@ -129,27 +248,65 @@ export default {
         lng: -71.559042,
       },
       zoom: 12,
+      origen: [
+        {
+          text: "Telefonico",
+          value: "TELEFONICO",
+        },
+        {
+          text: "Patrullaje",
+          value: "PATRULLAJE",
+        },
+      ],
     };
   },
-  computed: {
-    alertasExists() {
-      if (this.alertas.length == 0) return true;
-      else return false;
+  validations: {
+    formIncidente: {
+      telefono: {
+        required,
+      },
     },
+  },
+  computed: {
     ...mapState({
       unidad: (state) => state.unidad.unidad,
       personal: (state) => state.personal.personal,
+      incidentes: (state) => state.incidentes.tipoIncidentes,
     }),
   },
   created() {
     this.form.usuario = this.$store.state.authentication.user.id;
-    console.log(this.$store.state.authentication.user);
     this.getIncidentes();
     this.getEnviados();
     this.getPersonal();
     this.getUnidad();
+    this.getData();
   },
   methods: {
+    validateState(name) {
+      const { $dirty, $error } = this.$v.formIncidente[name];
+      return $dirty ? !$error : null;
+    },
+    resetForm() {
+      this.form = {
+        id: null,
+        observacion: null,
+        estado: "ATENDIDO",
+        atendidoSerenazgo: true,
+        usuario: null,
+      };
+
+      this.formIncidente = {
+        nombres: null,
+        dni: null,
+        telefono: null,
+        tipoOrigen: null,
+        personalSeguridad: null,
+        unidad: null,
+        estado: "ENVIADO",
+        tipoIncidente: null,
+      };
+    },
     getPersonal() {
       const { dispatch } = this.$store;
       dispatch("personal/getPersonal");
@@ -180,29 +337,21 @@ export default {
           });
         });
     },
+    getData() {
+      const { dispatch } = this.$store;
+      dispatch("incidentes/getTipoIncidentes");
+    },
     goMap(position) {
       this.marker = position;
       this.zoom = 15;
     },
     enviado(id) {
-      const { dispatch } = this.$store;
-      const payload = {
-        id: id,
-        datos: { estado: "ENVIADO" },
-      };
-      dispatch("incidentes/updateIncidentes", payload);
-      this.eliminarFireStore(id, "incidentes", true);
+      this.formPersonal.id = id;
+      this.$bvModal.show("modal-enviado");
     },
     atendido(id) {
       this.form.id = id;
       this.$bvModal.show("modal-atendido");
-      // const { dispatch } = this.$store;
-      // const payload = {
-      //   id: id,
-      //   datos: { estado: "ATENDIDO", atendidoSerenazgo: true },
-      // };
-      // dispatch("incidentes/updateIncidentes", payload);
-      // this.eliminarFireStore(id, "enviados");
     },
     bloquear(usuarioId, id) {
       const { dispatch } = this.$store;
@@ -241,13 +390,39 @@ export default {
     submitForm() {
       const { dispatch } = this.$store;
       const { form } = this;
-      console.log(form);
       const payload = {
         id: form.id,
         datos: form,
       };
       dispatch("incidentes/updateIncidentes", payload);
       this.eliminarFireStore(form.id, "enviados");
+      this.resetForm();
+    },
+    handleOk(bvModalEvt) {
+      bvModalEvt.preventDefault();
+      this.$v.formIncidente.$touch();
+      if (this.$v.formIncidente.$anyError) {
+        return;
+      }
+
+      this.nuevoIncidente();
+    },
+    nuevoIncidente() {
+      const { dispatch } = this.$store;
+      const { formIncidente } = this;
+      dispatch("incidentes/addIncidente", formIncidente);
+      this.resetForm();
+    },
+    enviarPersonal() {
+      const { dispatch } = this.$store;
+      const { formPersonal } = this;
+      const payload = {
+        id: formPersonal.id,
+        datos: formPersonal,
+      };
+      dispatch("incidentes/updateIncidentes", payload);
+      this.eliminarFireStore(formPersonal.id, "incidentes", true);
+      this.resetForm();
     },
   },
 };
