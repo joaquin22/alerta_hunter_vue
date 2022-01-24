@@ -17,6 +17,7 @@ import ciudadanos from './modules/ciudadanos';
 import comunales from './modules/comunales';
 import personal from './modules/personal';
 import unidad from './modules/unidad';
+import noticias from './modules/noticias';
 
 Vue.use(Vuex);
 
@@ -37,5 +38,6 @@ export const store = new Vuex.Store({
     comunales,
     personal,
     unidad,
+    noticias,
   }
 });

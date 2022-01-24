@@ -23,19 +23,22 @@
       "title": "Ciudadanos",
       "icon": "user",
       "type": "link",
-      "active": false
+      "active": false,
+      "permisos": ["A", "B", "C"]
     },
     {
       "path": "/app/incidentes",
       "title": "Tipos de Incidentes",
       "icon": "git-pull-request",
       "type": "link",
-      "active": false
+      "active": false,
+      "permisos": ["A", "B"]
     },
     {
       "title": "Marcadores",
       "icon": "map-pin",
       "type": "sub",
+
       "badgeType": "primary",
       "badgeValue": "2",
       "active": false,
@@ -56,28 +59,40 @@
       "title": "Alertas",
       "icon": "map",
       "type": "link",
-      "active": false
+      "active": false,
+      "permisos": ["A", "B"]
     },
     {
       "path": "/app/alertas-list",
       "title": "Listado de Incidente",
       "icon": "map",
       "type": "link",
-      "active": false
+      "active": false,
+      "permisos": ["A", "B"]
     },
     {
       "path": "/app/Personal",
       "title": "Personal",
       "icon": "map",
       "type": "link",
-      "active": false
+      "active": false,
+      "permisos": ["A", "B"]
     },
     {
       "path": "/app/unidad",
       "title": "Unidades",
       "icon": "map",
       "type": "link",
-      "active": false
+      "active": false,
+      "permisos": ["A", "B"]
+    },
+    {
+      "path": "/app/noticias",
+      "title": "Noticias",
+      "icon": "globe",
+      "type": "link",
+      "active": false,
+      "permisos": ["A", "B"]
     }
   ]
 }

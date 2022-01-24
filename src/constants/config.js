@@ -11,7 +11,7 @@ export const localeOptions = [{
 
 let url = ""
 if (process.env.NODE_ENV == "production") {
-    url = "https://alertahunter.herokuapp.com/API"
+    url = "https://www.hunterseguro.com/API"
 } else {
     url = "http://localhost:8001/API"
 }

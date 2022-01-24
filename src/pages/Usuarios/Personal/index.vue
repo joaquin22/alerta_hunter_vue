@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs title="Unidad" />
+    <Breadcrumbs title="personal" />
     <!-- Container-fluid starts-->
     <div class="container-fluid">
       <div class="row">

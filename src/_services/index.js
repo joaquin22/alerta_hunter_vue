@@ -6,3 +6,4 @@ export * from './ciudadanos.services';
 export * from './comunales.services';
 export * from './personal.services';
 export * from './unidades.services';
+export * from './noticias.services';

@@ -13,6 +13,7 @@ import Comunal from '../pages/Usuarios/Comunal'
 import Ciudadanos from '../pages/Usuarios/Ciudadanos'
 import Personal from '../pages/Usuarios/Personal'
 import Unidad from '../pages/Usuarios/Unidad'
+import Noticias from '../pages/Noticias'
 import Incidentes from '../pages/Incidentes'
 import Marcadores from '../pages/Marcadores'
 import TipoMarcadores from '../pages/Marcadores/tiposMarcador'
@@ -114,6 +115,14 @@ const routes = [{
         name: 'unidad',
         meta: {
           title: 'Hunter Seguro | Unidad',
+        }
+      },
+      {
+        path: 'noticias',
+        component: Noticias,
+        name: 'noticias',
+        meta: {
+          title: 'Hunter Seguro | Noticias',
         }
       }
     ]

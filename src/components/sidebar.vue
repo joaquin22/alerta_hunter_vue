@@ -68,7 +68,7 @@
                 <i class="fa fa-angle-right pull-right"></i>
               </div>
             </a>
-            <!-- Link -->
+            <!-- Link AQUI && userType(menuItem.permisos)-->
             <router-link
               :to="menuItem.path"
               class="sidebar-link sidebar-title"
@@ -276,6 +276,11 @@ export default {
         ];
         return this.layoutobj;
       },
+    },
+    userType() {
+      return (permisos) => {
+        return permisos.includes("C");
+      };
     },
   },
   created() {

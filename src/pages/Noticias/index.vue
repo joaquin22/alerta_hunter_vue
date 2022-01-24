@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs title="Unidades" />
+    <Breadcrumbs title="Noticias" />
     <!-- Container-fluid starts-->
     <div class="container-fluid">
       <div class="row">
@@ -8,12 +8,12 @@
           <div class="card">
             <div class="card-header">
               <h5>
-                Unidades
+                Noticias
                 <a
                   v-b-modal.modal-6
                   class="btn btn-primary pull-right m-l-10"
-                  @click="modal.title = 'Nueva Unidad'"
-                >Añadir nueva Unidad</a>
+                  @click="modal.title = 'Nueva Noticia'"
+                >Añadir nueva Noticia</a>
               </h5>
             </div>
             <div class="card-body">
@@ -21,7 +21,7 @@
                 <b-table
                   striped
                   hover
-                  :items="unidad"
+                  :items="noticias"
                   :fields="fields"
                   :current-page="currentPage"
                   :per-page="perPage"
@@ -39,7 +39,7 @@
               <b-col md="6" class="p-0 mt-5">
                 <b-pagination
                   v-model="currentPage"
-                  :total-rows="unidad.length"
+                  :total-rows="noticias.length"
                   :per-page="perPage"
                   class="my-0"
                 ></b-pagination>
@@ -60,26 +60,54 @@
       @ok="submitForm"
     >
       <b-form>
-        <b-form-group id="input-numero" label="Número:" label-for="numero">
+        <b-form-group id="input-titulo" label="Titulo:" label-for="titulo">
           <b-form-input
-            :state="validateState('numero')"
-            id="numero"
+            :state="validateState('titulo')"
+            id="titulo"
             type="text"
-            placeholder="Movil 01"
-            v-model="form.numero"
+            placeholder="Titulo"
+            v-model="form.titulo"
           ></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="input-placa" label="Placa:" label-for="placa">
+        <b-form-group id="input-link" label="Link:" label-for="link">
           <b-form-input
-            :state="validateState('placa')"
-            id="placa"
+            :state="validateState('link')"
+            id="link"
             type="text"
-            placeholder="00-0000"
-            v-model="form.placa"
+            placeholder="https://ejemplo.com"
+            v-model="form.link"
           ></b-form-input>
+          <b-form-invalid-feedback
+            v-if="!$v.form.link.required"
+            id="input-2-live-feedback"
+          >Este campo es obligatorio.</b-form-invalid-feedback>
+          <b-form-invalid-feedback
+            v-else-if="!$v.form.link.url"
+            id="input-2-live-feedback"
+          >Debde ser un link valido.</b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-form-group id="input-fecha" label="Fecha:" label-for="fecha">
+          <b-form-datepicker
+            :state="validateState('fecha')"
+            id="datepicker-sm"
+            size="sm"
+            locale="es"
+            class="mb-2"
+            v-model="form.fecha"
+          ></b-form-datepicker>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-form-group id="input-imagen" label="Imagen:" label-for="imagen">
+          <b-form-file
+            @change="handleFileUpload( $event )"
+            placeholder="Seleccione una imagen..."
+            drop-placeholder="Drop file here..."
+            browse-text="Buscar"
+          ></b-form-file>
         </b-form-group>
       </b-form>
     </b-modal>
@@ -89,15 +117,17 @@
 <script>
 import { mapState } from "vuex";
 import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { required, url } from "vuelidate/lib/validators";
 
 export default {
   mixins: [validationMixin],
   data() {
     return {
       form: {
-        numero: null,
-        placa: null,
+        link: null,
+        titulo: null,
+        fecha: null,
+        imagen: null,
       },
       fields: [
         {
@@ -107,14 +137,14 @@ export default {
           sortDirection: "desc",
         },
         {
-          key: "numero",
-          label: "Número",
+          key: "titulo",
+          label: "Titulo",
           sortable: true,
           sortDirection: "desc",
         },
         {
-          key: "placa",
-          label: "Placa",
+          key: "fecha",
+          label: "Fecha",
           sortable: true,
           sortDirection: "desc",
         },
@@ -131,17 +161,21 @@ export default {
   },
   validations: {
     form: {
-      numero: {
+      link: {
+        url,
         required,
       },
-      placa: {
+      titulo: {
+        required,
+      },
+      fecha: {
         required,
       },
     },
   },
   computed: {
     ...mapState({
-      unidad: (state) => state.unidad.unidad,
+      noticias: (state) => state.noticias.noticias,
     }),
   },
   created() {
@@ -154,8 +188,10 @@ export default {
     },
     resetForm() {
       this.form = {
-        numero: null,
-        placa: null,
+        link: null,
+        titulo: null,
+        fecha: null,
+        imagen: null,
       };
 
       this.$nextTick(() => {
@@ -164,7 +200,10 @@ export default {
     },
     getData() {
       const { dispatch } = this.$store;
-      dispatch("unidad/getUnidad");
+      dispatch("noticias/getNoticias");
+    },
+    handleFileUpload(e) {
+      this.form.imagen = e.target.files[0];
     },
     submitForm(bvModalEvt) {
       bvModalEvt.preventDefault();
@@ -174,14 +213,20 @@ export default {
       }
       const { dispatch } = this.$store;
       const { form } = this;
+      let formData = new FormData();
+      formData.append("link", form.link);
+      formData.append("titulo", form.titulo);
+      formData.append("fecha", form.fecha);
+      if (form.imagen) formData.append("imagen", form.imagen);
+
       if (this.edit) {
-        dispatch("unidad/updateUnidad", {
+        dispatch("noticias/updateNoticia", {
           id: this.updateId,
-          datos: form,
+          datos: formData,
         }).then(() => {
           this.resetForm();
           this.showToast(
-            "Se edito correctamente el unidad",
+            "Se edito correctamente la noticia",
             "check",
             "success"
           );
@@ -191,10 +236,10 @@ export default {
           });
         });
       } else {
-        dispatch("unidad/addUnidad", form).then(() => {
+        dispatch("noticias/addNoticia", formData).then(() => {
           this.resetForm();
           this.showToast(
-            "Se agrego correctamente el unidad",
+            "Se agrego correctamente la noticia",
             "check",
             "success"
           );
@@ -206,7 +251,7 @@ export default {
     },
     deleteModal(row) {
       this.$swal({
-        text: `¿Esta seguro que desea elimnar a ${row.numero} ?`,
+        text: `¿Esta seguro que desea elimnar a ${row.titulo} ?`,
         showCancelButton: true,
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#4466f2",
@@ -216,15 +261,16 @@ export default {
       }).then((result) => {
         if (result.value) {
           const { dispatch } = this.$store;
-          dispatch("unidad/deleteUnidad", row.id);
+          dispatch("noticias/deleteNoticia", row.id);
           this.showToast("Se elimino correctamente", "trash", "error");
         }
       });
     },
     editModal(item) {
-      this.modal.title = "Editar Unidad";
-      this.form.numero = item.numero;
-      this.form.placa = item.placa;
+      this.modal.title = "Editar Noticia";
+      this.form.titulo = item.titulo;
+      this.form.fecha = item.fecha;
+      this.form.link = item.link;
       this.updateId = item.id;
       this.$bvModal.show("modal-6");
       this.edit = true;
