@@ -105,7 +105,7 @@ export default {
         },
         {
           name: "telefono",
-          title: "Telefono",
+          title: "Teléfono",
           titleClass: "",
           sortField: "telefono",
         },

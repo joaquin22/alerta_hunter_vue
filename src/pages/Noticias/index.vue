@@ -57,15 +57,16 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="submitForm"
     >
       <b-form>
-        <b-form-group id="input-titulo" label="Titulo:" label-for="titulo">
+        <b-form-group id="input-titulo" label="Título:" label-for="titulo">
           <b-form-input
             :state="validateState('titulo')"
             id="titulo"
             type="text"
-            placeholder="Titulo"
+            placeholder="Título"
             v-model="form.titulo"
           ></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
@@ -125,7 +126,7 @@ export default {
         },
         {
           key: "titulo",
-          label: "Titulo",
+          label: "Título",
           sortable: true,
           sortDirection: "desc",
         },
@@ -176,6 +177,7 @@ export default {
         fecha: null,
         imagen: null,
       };
+      this.edit = false;
 
       this.$nextTick(() => {
         this.$v.$reset();
@@ -253,7 +255,7 @@ export default {
       this.modal.title = "Editar Noticia";
       this.form.titulo = item.titulo;
       this.form.fecha = item.fecha;
-      this.form.link = item.link;
+      if (item.link != "null") this.form.link = item.link;
       this.updateId = item.id;
       this.$bvModal.show("modal-6");
       this.edit = true;

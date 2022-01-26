@@ -7,7 +7,7 @@ const state = {
 }
 
 const getters = {
-
+    getPersonal: state => (Id) => state.personal.find((event) => event.id == Id),
 };
 
 const actions = {

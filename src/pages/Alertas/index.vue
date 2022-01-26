@@ -97,6 +97,7 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="enviarPersonal"
     >
       <b-form>
@@ -126,6 +127,7 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="handleOk"
     >
       <b-form>
@@ -142,7 +144,7 @@
           <b-form-input id="dni" type="text" placeholder="DNI" v-model="formIncidente.dni"></b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-telefono" label="Telefono:" label-for="telefono">
+        <b-form-group id="input-telefono" label="Teléfono:" label-for="telefono">
           <b-form-input
             :state="validateState('telefono')"
             id="telefono"
@@ -371,7 +373,7 @@ export default {
         datos: { estado: "CERRADO" },
       };
       dispatch("incidentes/updateIncidentes", payload);
-      this.eliminarFireStore(id, "incidentes");
+      this.eliminarFireStore(payload, "incidentes");
     },
     fuera(id) {
       const { dispatch } = this.$store;
@@ -380,14 +382,22 @@ export default {
         datos: { estado: "FUERA_JURISDICCION" },
       };
       dispatch("incidentes/updateIncidentes", payload);
-      this.eliminarFireStore(id, "incidentes");
+      this.eliminarFireStore(payload, "incidentes");
     },
-    eliminarFireStore(id, collection, mover = false) {
-      var docData = db.collection(collection).where("id", "==", id);
+    eliminarFireStore(form, collection, mover = false) {
+      const { getters } = this.$store;
+      var docData = db.collection(collection).where("id", "==", form.id);
       docData.get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           if (mover) {
-            db.collection("enviados").doc(doc.id).set(doc.data());
+            let data = doc.data();
+            const peresonal = getters["personal/getPersonal"](
+              form.personalSeguridad
+            );
+            const unidad = getters["unidad/getUnidad"](form.unidad);
+            data["personal"] = peresonal.text;
+            data["unidad"] = unidad.text;
+            db.collection("enviados").doc(doc.id).set(data);
           }
           doc.ref.delete();
         });
@@ -402,7 +412,7 @@ export default {
         datos: form,
       };
       dispatch("incidentes/updateIncidentes", payload);
-      this.eliminarFireStore(form.id, "enviados");
+      this.eliminarFireStore(form, "enviados");
       this.resetForm();
     },
     handleOk(bvModalEvt) {
@@ -425,12 +435,13 @@ export default {
     enviarPersonal() {
       const { dispatch } = this.$store;
       const { formPersonal } = this;
+
       const payload = {
         id: formPersonal.id,
         datos: formPersonal,
       };
       dispatch("incidentes/updateIncidentes", payload);
-      this.eliminarFireStore(formPersonal.id, "incidentes", true);
+      this.eliminarFireStore(formPersonal, "incidentes", true);
       this.resetForm();
     },
   },

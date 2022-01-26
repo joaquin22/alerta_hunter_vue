@@ -17,10 +17,12 @@
       </small>
     </div>
 
-    <p class="mb-1">Nombres: {{datos.nombre}}</p>
-    <p class="mb-1">Nro. Documento: {{datos.dni}}</p>
-    <p class="mb-1">Telefono: {{datos.telefono}}</p>
-    <p class="mb-1">Ubicación: {{datos.ubicacion}}</p>
+    <p class="mb-1" :style="css">Nombres: {{datos.nombre}}</p>
+    <p class="mb-1" :style="css">Nro. Documento: {{datos.dni}}</p>
+    <p class="mb-1" :style="css">Telefono: {{datos.telefono}}</p>
+    <p class="mb-1" v-show="datos.personal" :style="css">Personal: {{datos.personal}}</p>
+    <p class="mb-1" v-show="datos.unidad" :style="css">Unidad: {{datos.unidad}}</p>
+    <p class="mb-1" :style="css">Ubicación: {{datos.ubicacion}}</p>
   </b-list-group-item>
   <!-- <b-card class="card-alertas" :style="{ 'background-color': datos.color }" @click.stop="goMap">
     <b-card-title>{{datos.tipo}}</b-card-title>
@@ -64,6 +66,13 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      css: {
+        color: "white",
+      },
+    };
   },
   methods: {
     goMap() {

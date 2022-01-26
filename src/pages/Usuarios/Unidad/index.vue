@@ -57,6 +57,7 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="submitForm"
     >
       <b-form>
@@ -157,6 +158,7 @@ export default {
         numero: null,
         placa: null,
       };
+      this.edit = false;
 
       this.$nextTick(() => {
         this.$v.$reset();

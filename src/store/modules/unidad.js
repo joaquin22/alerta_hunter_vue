@@ -7,7 +7,7 @@ const state = {
 }
 
 const getters = {
-
+    getUnidad: state => (Id) => state.unidad.find((event) => event.id == Id),
 };
 
 const actions = {

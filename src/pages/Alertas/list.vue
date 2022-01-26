@@ -21,7 +21,7 @@
                 </b-col>
 
                 <b-col xl="6">
-                  <json-excel :data="incidentes" :fields="json_fields">
+                  <json-excel :data="incidentes" :fields="json_fields" name="incidentes.xlsx">
                     <a class="btn btn-primary pull-right m-l-10">Exportar Excel</a>
                   </json-excel>
                 </b-col>

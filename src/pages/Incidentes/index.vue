@@ -70,7 +70,7 @@
           <b-form-invalid-feedback id="input-2-live-feedback">Falta el nombre del incidente.</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="input-area" label="Area:" label-for="area">
+        <b-form-group id="input-area" label="Área:" label-for="area">
           <b-form-select
             :state="validateState('area')"
             id="area"
@@ -140,7 +140,7 @@ export default {
         },
         {
           key: "area",
-          label: "Area",
+          label: "Área",
           sortable: true,
           sortDirection: "desc",
         },
@@ -193,6 +193,7 @@ export default {
         area: null,
         nivel: null,
       };
+      this.edit = false;
 
       this.$nextTick(() => {
         this.$v.$reset();

@@ -57,6 +57,7 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="submitForm"
     >
       <b-form>
@@ -157,10 +158,10 @@ export default {
         nombres: null,
         apellidos: null,
       };
-
-      this.$nextTick(() => {
-        this.$v.$reset();
-      });
+      (this.edit = false),
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
     },
     getData() {
       const { dispatch } = this.$store;

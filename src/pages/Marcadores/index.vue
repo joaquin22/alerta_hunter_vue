@@ -63,7 +63,7 @@
       ref="marcadorModal"
     >
       <b-form>
-        <b-form-group label="Ubicación:" label-for="ubicacion" v-show="isMapa">
+        <b-form-group label="Ubicación:" label-for="ubicacion" v-show="isAQP">
           <markerMaps :marker="marker" @create="addLatLng"></markerMaps>
         </b-form-group>
 
@@ -78,7 +78,7 @@
           <b-form-invalid-feedback id="input-2-live-feedback">Falta el nombre del marcador.</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group label="Telefono:" label-for="telefono">
+        <b-form-group label="Teléfono:" label-for="telefono">
           <b-form-input
             :state="validateState('telefono')"
             id="telefono"
@@ -101,16 +101,19 @@
           <b-form-invalid-feedback id="input-2-live-feedback">Falta la dirección del marcador.</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group label="Mostrar en el mapa:" label-for="mostrar">
+        <b-form-group
+          :label="isMapa?'Mostrar en el mapa:':'Mostrar ubicación en Google Maps'"
+          label-for="mostrar"
+        >
           <div class="media-body text-left icon-state">
             <label class="switch">
-              <input type="checkbox" v-model="form.mostrar" @change="mostrarMapa($event)" />
+              <input type="checkbox" v-model="form.mostrar" />
               <span class="switch-state"></span>
             </label>
           </div>
         </b-form-group>
-        <label for>Tipo de marcador</label>
-        <b-list-group horizontal>
+        <label for v-show="isAQP">Tipo de marcador</label>
+        <b-list-group horizontal v-show="isAQP">
           <b-list-group-item
             tag="a"
             href="#"
@@ -175,7 +178,7 @@ export default {
         },
         {
           key: "telefono",
-          label: "Telefono",
+          label: "Teléfono",
           sortable: true,
           sortDirection: "desc",
         },
@@ -232,6 +235,9 @@ export default {
     showMap() {
       return this.form.lugar == "HUNTER";
     },
+    isAQP() {
+      return this.form.lugar == "AREQUIPA" ? false : true;
+    },
   },
   created() {
     this.getData();
@@ -271,13 +277,20 @@ export default {
       bvModalEvt.preventDefault();
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
-        if (this.tipoSelected == 0) this.error = true;
+        if (this.tipoSelected == 0 && this.isMapa) this.error = true;
         else this.error = false;
         return;
       }
       const { dispatch } = this.$store;
-      const { form } = this;
 
+      const { form } = this;
+      let lugar = this.form.lugar;
+      if (lugar == "AREQUIPA") {
+        form.latitud = null;
+        form.longitud = null;
+      }
+
+      console.log(form);
       if (this.modal.action.create) {
         dispatch("marcadores/addMarcador", form).then(() => {
           this.resetForm();
@@ -291,7 +304,6 @@ export default {
           });
         });
       } else {
-        console.log(form);
         dispatch("marcadores/updateMarcador", {
           id: this.updateId,
           datos: form,
@@ -359,9 +371,10 @@ export default {
         this.isMapa = item.mostrar;
       } else {
         this.isMapa = true;
+        this.form.tipoMarcador = { id: item.tipoMarcador.id };
+        this.tipoSelected = item.tipoMarcador.id;
       }
-      this.form.tipoMarcador = { id: item.tipoMarcador.id };
-      this.tipoSelected = item.tipoMarcador.id;
+
       if (item.latitud && item.longitud) {
         this.marker = {
           lat: item.latitud,

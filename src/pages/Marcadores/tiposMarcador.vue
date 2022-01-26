@@ -63,6 +63,7 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="submitForm"
     >
       <b-form>
@@ -154,6 +155,16 @@ export default {
     this.getData();
   },
   methods: {
+    resetForm() {
+      this.edit = false;
+      this.form = {
+        tipo: null,
+        imagen: null,
+      };
+      this.$nextTick(() => {
+        this.$v.$reset();
+      });
+    },
     getData() {
       const { dispatch } = this.$store;
       dispatch("marcadores/getTipoMarcadores");
