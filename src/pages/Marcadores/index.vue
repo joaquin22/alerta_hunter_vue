@@ -58,6 +58,7 @@
       :title="modal.title"
       class="theme-modal"
       centered
+      @hidden="resetForm"
       @ok="submitForm"
       ref="marcadorModal"
     >
@@ -144,8 +145,8 @@ export default {
   data() {
     return {
       form: {
-        latitud: null,
-        longitud: null,
+        latitud: -16.440132,
+        longitud: -71.559042,
         nombre: null,
         telefono: null,
         direccion: null,
@@ -242,8 +243,8 @@ export default {
     },
     resetForm() {
       this.form = {
-        latitud: null,
-        longitud: null,
+        latitud: -16.440132,
+        longitud: -71.559042,
         nombre: null,
         telefono: null,
         direccion: null,
@@ -251,6 +252,7 @@ export default {
         tipoMarcador: null,
         lugar: null,
       };
+      this.tipoSelected = 0;
 
       this.$nextTick(() => {
         this.$v.$reset();

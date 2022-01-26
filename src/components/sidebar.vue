@@ -54,12 +54,12 @@
             <!-- Sub -->
             <label
               :class="'badge badge-'+menuItem.badgeType"
-              v-if="menuItem.badgeType"
+              v-if="menuItem.badgeType && userType(menuItem.permisos)"
             >{{ menuItem.badgeValue }}</label>
             <a
               href="javascript:void(0)"
               class="sidebar-link sidebar-title"
-              v-if="menuItem.type == 'sub'"
+              v-if="menuItem.type == 'sub' && userType(menuItem.permisos)"
               @click="setNavActive(menuItem, index)"
             >
               <feather :type="menuItem.icon" class="top"></feather>
@@ -68,11 +68,11 @@
                 <i class="fa fa-angle-right pull-right"></i>
               </div>
             </a>
-            <!-- Link AQUI && userType(menuItem.permisos)-->
+            <!-- Link AQUI-->
             <router-link
               :to="menuItem.path"
               class="sidebar-link sidebar-title"
-              v-if="menuItem.type == 'link'"
+              v-if="menuItem.type == 'link' && userType(menuItem.permisos)"
               router-link-exact-active
             >
               <feather :type="menuItem.icon" class="top"></feather>
@@ -278,8 +278,9 @@ export default {
       },
     },
     userType() {
+      let tipo = this.$store.state.authentication.user.tipo;
       return (permisos) => {
-        return permisos.includes("C");
+        return permisos.includes(tipo);
       };
     },
   },

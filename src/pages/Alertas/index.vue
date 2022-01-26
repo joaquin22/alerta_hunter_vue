@@ -12,7 +12,7 @@
               </h4>
             </template>
             <b-card-text class="mb-0">
-              <markerMaps :marker="marker" :zoom="zoom" />
+              <markerMaps :marker="getMarker" :zoom="zoom" :isCreate="false" />
             </b-card-text>
           </b-card>
         </div>
@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <!-- AÑADIR MARCADOR MODAL -->
+
     <b-modal
       id="modal-atendido"
       title="Atendido"
@@ -142,7 +142,7 @@
           <b-form-input id="dni" type="text" placeholder="DNI" v-model="formIncidente.dni"></b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-telefono" label="Telefono:" label-for="telefono" required>
+        <b-form-group id="input-telefono" label="Telefono:" label-for="telefono">
           <b-form-input
             :state="validateState('telefono')"
             id="telefono"
@@ -273,9 +273,11 @@ export default {
       personal: (state) => state.personal.personal,
       incidentes: (state) => state.incidentes.tipoIncidentes,
     }),
+    getMarker() {
+      return this.marker;
+    },
   },
   created() {
-    this.form.usuario = this.$store.state.authentication.user.id;
     this.getIncidentes();
     this.getEnviados();
     this.getPersonal();
@@ -306,6 +308,10 @@ export default {
         estado: "ENVIADO",
         tipoIncidente: null,
       };
+
+      this.$nextTick(() => {
+        this.$v.$reset();
+      });
     },
     getPersonal() {
       const { dispatch } = this.$store;
@@ -390,6 +396,7 @@ export default {
     submitForm() {
       const { dispatch } = this.$store;
       const { form } = this;
+      form.usuario = this.$store.state.authentication.user.id;
       const payload = {
         id: form.id,
         datos: form,
@@ -404,7 +411,6 @@ export default {
       if (this.$v.formIncidente.$anyError) {
         return;
       }
-
       this.nuevoIncidente();
     },
     nuevoIncidente() {
@@ -412,6 +418,9 @@ export default {
       const { formIncidente } = this;
       dispatch("incidentes/addIncidente", formIncidente);
       this.resetForm();
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-alertas");
+      });
     },
     enviarPersonal() {
       const { dispatch } = this.$store;

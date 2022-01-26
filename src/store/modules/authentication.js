@@ -35,7 +35,8 @@ export const authentication = {
                 .then(
                     user => {
                         commit('loginSuccess', user);
-                        router.push('/');
+                        if (user.tipo == "SERENAZGO") router.push("/app/alertas")
+                        else router.push('/');
                     },
                     error => {
                         commit('loginFailure', error);

@@ -68,6 +68,7 @@ export default {
   methods: {
     goMap() {
       let cooredenadas = this.datos.ubicacion.split(",");
+      if (cooredenadas[0] == " - ") return;
       const position = {
         lat: parseFloat(cooredenadas[0]),
         lng: parseFloat(cooredenadas[1]),

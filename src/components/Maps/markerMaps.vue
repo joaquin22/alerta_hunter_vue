@@ -1,7 +1,19 @@
 <template>
   <div>
-    <GmapMap :center="marker" :zoom="zoom" style="width: 100%; height: 500px">
-      <GmapMarker :position="marker" :draggable="true" @drag="updateCoordinates" />
+    <GmapMap
+      :options="mapOptions"
+      :center="center"
+      :zoom="zoom"
+      style="width: 100%; height: 500px"
+      ref="mapRef"
+    >
+      <GmapMarker
+        v-if="isCreate"
+        :position="getPosition"
+        :draggable="true"
+        @drag="updateCoordinates"
+      />
+      <GmapMarker v-else :position="marker" />
     </GmapMap>
   </div>
 </template>
@@ -12,8 +24,8 @@ export default {
       type: Object,
       default: function () {
         return {
-          lat: -16.39889,
-          lng: -71.535,
+          lat: -16.440132,
+          lng: -71.559042,
         };
       },
     },
@@ -21,12 +33,39 @@ export default {
       type: Number,
       default: 12,
     },
+    isCreate: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    getPosition() {
+      return this.marker;
+    },
+  },
+  watch: {
+    marker(newValue) {
+      this.$refs.mapRef.$mapPromise.then((map) => {
+        map.panTo({ lat: newValue.lat, lng: newValue.lng });
+        map.setZoom(15);
+      });
+    },
   },
   data() {
     return {
       center: {
-        lat: -16.39889,
-        lng: -71.535,
+        lat: -16.440132,
+        lng: -71.559042,
+      },
+      mapOptions: {
+        zoomControl: true,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true,
+        disableDefaultUi: false,
+        disableDoubleClickZoom: false,
       },
     };
   },
@@ -36,7 +75,6 @@ export default {
         lat: location.latLng.lat(),
         lng: location.latLng.lng(),
       };
-
       this.$emit("create", position);
     },
   },

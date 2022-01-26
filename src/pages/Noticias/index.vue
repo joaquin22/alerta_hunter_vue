@@ -72,21 +72,7 @@
         </b-form-group>
 
         <b-form-group id="input-link" label="Link:" label-for="link">
-          <b-form-input
-            :state="validateState('link')"
-            id="link"
-            type="text"
-            placeholder="https://ejemplo.com"
-            v-model="form.link"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            v-if="!$v.form.link.required"
-            id="input-2-live-feedback"
-          >Este campo es obligatorio.</b-form-invalid-feedback>
-          <b-form-invalid-feedback
-            v-else-if="!$v.form.link.url"
-            id="input-2-live-feedback"
-          >Debde ser un link valido.</b-form-invalid-feedback>
+          <b-form-input id="link" type="text" placeholder="https://ejemplo.com" v-model="form.link"></b-form-input>
         </b-form-group>
 
         <b-form-group id="input-fecha" label="Fecha:" label-for="fecha">
@@ -97,6 +83,7 @@
             locale="es"
             class="mb-2"
             v-model="form.fecha"
+            label-no-date-selected="Seleccione una fecha"
           ></b-form-datepicker>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
@@ -117,7 +104,7 @@
 <script>
 import { mapState } from "vuex";
 import { validationMixin } from "vuelidate";
-import { required, url } from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 
 export default {
   mixins: [validationMixin],
@@ -161,10 +148,6 @@ export default {
   },
   validations: {
     form: {
-      link: {
-        url,
-        required,
-      },
       titulo: {
         required,
       },

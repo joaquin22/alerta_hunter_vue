@@ -107,7 +107,7 @@
             :state="validateState('password')"
             id="password"
             type="password"
-            placeholder="Password"
+            placeholder="Contraseña"
             v-model="form.password"
           ></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>

@@ -24,7 +24,16 @@ const actions = {
         )
     },
     updateCiudadanos(_, payload) {
-        ciudadanosService.updateCiudadanos(payload)
+        return new Promise((resolve, reject) => {
+            ciudadanosService.updateCiudadanos(payload).then(
+                ciudadanos => {
+                    resolve(ciudadanos);
+                }, err => {
+                    reject(err);
+                }
+            )
+        })
+
     },
 
 };

@@ -4,19 +4,14 @@
       "icon": "users",
       "type": "sub",
       "badgeType": "primary",
-      "badgeValue": "2",
+      "badgeValue": "1",
       "active": false,
+      "permisos": ["ADMINISTRADOR"],
       "children": [{
-          "path": "/usuarios/serenazgo",
-          "title": "Serenazgo",
-          "type": "link"
-        },
-        {
-          "path": "/usuarios/comunal",
-          "title": "Comunal",
-          "type": "link"
-        }
-      ]
+        "path": "/usuarios/serenazgo",
+        "title": "Serenazgo",
+        "type": "link"
+      }]
     },
     {
       "path": "/app/ciudadanos",
@@ -24,7 +19,7 @@
       "icon": "user",
       "type": "link",
       "active": false,
-      "permisos": ["A", "B", "C"]
+      "permisos": ["ADMINISTRADOR"]
     },
     {
       "path": "/app/incidentes",
@@ -32,7 +27,7 @@
       "icon": "git-pull-request",
       "type": "link",
       "active": false,
-      "permisos": ["A", "B"]
+      "permisos": ["ADMINISTRADOR"]
     },
     {
       "title": "Marcadores",
@@ -42,6 +37,7 @@
       "badgeType": "primary",
       "badgeValue": "2",
       "active": false,
+      "permisos": ["ADMINISTRADOR"],
       "children": [{
           "path": "/app/marcadores",
           "title": "Marcadores",
@@ -57,34 +53,34 @@
     {
       "path": "/app/alertas",
       "title": "Alertas",
-      "icon": "map",
+      "icon": "alert-circle",
       "type": "link",
       "active": false,
-      "permisos": ["A", "B"]
+      "permisos": ["ADMINISTRADOR", "SERENAZGO"]
     },
     {
       "path": "/app/alertas-list",
       "title": "Listado de Incidente",
-      "icon": "map",
+      "icon": "list",
       "type": "link",
       "active": false,
-      "permisos": ["A", "B"]
+      "permisos": ["ADMINISTRADOR"]
     },
     {
       "path": "/app/Personal",
       "title": "Personal",
-      "icon": "map",
+      "icon": "users",
       "type": "link",
       "active": false,
-      "permisos": ["A", "B"]
+      "permisos": ["ADMINISTRADOR"]
     },
     {
       "path": "/app/unidad",
       "title": "Unidades",
-      "icon": "map",
+      "icon": "truck",
       "type": "link",
       "active": false,
-      "permisos": ["A", "B"]
+      "permisos": ["ADMINISTRADOR"]
     },
     {
       "path": "/app/noticias",
@@ -92,7 +88,7 @@
       "icon": "globe",
       "type": "link",
       "active": false,
-      "permisos": ["A", "B"]
+      "permisos": ["ADMINISTRADOR"]
     }
   ]
 }

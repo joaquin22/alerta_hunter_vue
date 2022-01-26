@@ -55,6 +55,7 @@
       cancel-title="Cancelar"
       ok-title="Guardar"
       class="theme-modal"
+      @hidden="resetForm"
       @ok="submitForm"
     >
       <b-form>
@@ -75,7 +76,11 @@
             id="area"
             v-model="form.area"
             :options="tipoArea"
-          ></b-form-select>
+          >
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
           <b-form-invalid-feedback id="input-2-live-feedback">Seleccione un area.</b-form-invalid-feedback>
         </b-form-group>
 
@@ -85,7 +90,11 @@
             id="nivel"
             v-model="form.nivel"
             :options="niveles"
-          ></b-form-select>
+          >
+            <template #first>
+              <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
+            </template>
+          </b-form-select>
           <b-form-invalid-feedback id="input-2-live-feedback">Seleccione un nivel.</b-form-invalid-feedback>
         </b-form-group>
       </b-form>

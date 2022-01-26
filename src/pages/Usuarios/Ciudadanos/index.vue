@@ -10,32 +10,53 @@
               <h5>Ciudadanos</h5>
             </div>
             <div class="card-body">
-              <vuetable
-                ref="vuetable"
-                :api-url="apiBase"
-                :query-params="makeQueryParams"
-                :per-page="perPage"
-                :reactive-api-url="true"
-                :fields="fields"
-                pagination-path
-                :row-class="onRowClass"
-                @vuetable:pagination-data="onPaginationData"
-                @vuetable:row-clicked="rowClicked"
-                @vuetable:cell-rightclicked="rightClicked"
-              >
-                <div slot="actions" slot-scope="props">
-                  <b-button
-                    variant="primary"
-                    class="mb-3 mr-1"
-                    @click="desbloquear(props.rowData.id)"
-                  >Desbloquear</b-button>
-                </div>
-              </vuetable>
-              <vuetable-pagination-bootstrap
-                class="mt-4"
-                ref="pagination"
-                @vuetable-pagination:change-page="onChangePage"
-              />
+              <b-row>
+                <b-col xl="10" class="delete-datatable">
+                  <b-input-group class="datatable-btn">
+                    <b-form-input v-model="filter" placeholder="Buscar por Nombres" class="mr-3"></b-form-input>
+                    <b-button
+                      variant="success"
+                      :disabled="!filter"
+                      @click="setFilter(filter)"
+                      class="mr-1"
+                    >Buscar</b-button>
+                    <b-button variant="primary" @click="limpiar">Limpiar</b-button>
+                  </b-input-group>
+                </b-col>
+              </b-row>
+              <div class="table-responsive datatable-vue">
+                <vuetable
+                  ref="vuetable"
+                  :api-url="apiBase"
+                  :query-params="makeQueryParams"
+                  :per-page="perPage"
+                  :reactive-api-url="true"
+                  :fields="fields"
+                  :append-params="moreParams"
+                  pagination-path
+                  @vuetable:pagination-data="onPaginationData"
+                >
+                  <div slot="actions" slot-scope="props">
+                    <b-button
+                      variant="primary"
+                      class="mb-3 mr-1"
+                      @click.stop="confimacion('desbloquear',props.rowData.id)"
+                      v-if="props.rowData.estado=='BLOQUEADO'"
+                    >Desbloquear</b-button>
+                    <b-button
+                      variant="danger"
+                      class="mb-3 mr-1"
+                      @click.stop="confimacion('bloquear',props.rowData.id)"
+                      v-if="props.rowData.estado=='ACTIVO'"
+                    >Bloquear</b-button>
+                  </div>
+                </vuetable>
+                <vuetable-pagination-bootstrap
+                  class="mt-4"
+                  ref="pagination"
+                  @vuetable-pagination:change-page="onChangePage"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -67,31 +88,38 @@ export default {
       lastPage: 0,
       items: [],
       selectedItems: [],
+      filter: "",
+      moreParams: {},
       fields: [
         {
           name: "id",
           title: "ID",
           titleClass: "",
+          sortField: "id",
         },
         {
           name: "nombreCompleto",
           title: "Nombres",
           titleClass: "",
+          sortField: "nombreCompleto",
         },
         {
           name: "telefono",
           title: "Telefono",
           titleClass: "",
+          sortField: "telefono",
         },
         {
           name: "direccion",
           title: "Dirección",
           titleClass: "",
+          sortField: "direccion",
         },
         {
           name: "dni",
           title: "DNI",
           titleClass: "",
+          sortField: "dni",
         },
         {
           name: "estado",
@@ -125,24 +153,40 @@ export default {
     onChangePage(page) {
       this.$refs.vuetable.changePage(page);
     },
-    makeQueryParams(sortOrder, currentPage, perPage) {
+    makeQueryParams(sortOrder, currentPage) {
       this.selectedItems = [];
-      return sortOrder[0]
-        ? {
-            sort: sortOrder[0]
-              ? sortOrder[0].field + "|" + sortOrder[0].direction
-              : "",
-            page: currentPage,
-            per_page: this.perPage,
-            search: this.search,
-          }
-        : {
-            page: currentPage,
-            per_page: this.perPage,
-            search: this.search,
-          };
+      let query = {};
+
+      if (sortOrder[0] != undefined) {
+        query = {
+          order_by: sortOrder[0].field,
+          page_no: currentPage,
+          per_page: this.perPage,
+        };
+        if (sortOrder[0].direction == "desc") {
+          query["order_type"] = "-";
+        }
+      } else {
+        query = {
+          page_no: currentPage,
+          per_page: this.perPage,
+        };
+      }
+
+      return query;
+      // return sortOrder[0]
+      //   ? {
+      //       order_by: sortOrder[0] ? sortOrder[0].field : "",
+      //       order_type: sortOrder[0] ? sortOrder[0].field : "",
+      //       page_no: currentPage,
+      //       per_page: this.perPage,
+      //     }
+      //   : {
+      //       page_no: currentPage,
+      //       per_page: this.perPage,
+      //     };
     },
-    onRowClass(dataItem, index) {
+    onRowClass(dataItem) {
       if (this.selectedItems.includes(dataItem.id)) {
         return "selected";
       }
@@ -218,14 +262,56 @@ export default {
       }
       return -1;
     },
+    confimacion(fnc, id) {
+      this.$swal({
+        text: `¿Esta seguro que desea continuar ?`,
+        showCancelButton: true,
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#4466f2",
+        cancelButtonText: "Cancelar",
+        cancelButtonColor: "#efefef",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.value) {
+          this[fnc](id);
+        }
+      });
+    },
+    bloquear(id) {
+      const { dispatch } = this.$store;
+      const payload = {
+        id: id,
+        datos: { estado: "BLOQUEADO" },
+      };
+      dispatch("ciudadanos/updateCiudadanos", payload).then(() => {
+        this.$nextTick(() => {
+          this.$refs.vuetable.refresh();
+        });
+      });
+    },
     desbloquear(id) {
       const { dispatch } = this.$store;
       const payload = {
         id: id,
         datos: { estado: "ACTIVO" },
       };
-      dispatch("ciudadanos/updateCiudadanos", payload);
-      this.$refs.vuetable.refresh();
+      dispatch("ciudadanos/updateCiudadanos", payload).then(() => {
+        this.$nextTick(() => {
+          this.$refs.vuetable.refresh();
+        });
+      });
+    },
+    setFilter(filterText) {
+      this.moreParams = {
+        nombreCompleto: filterText,
+      };
+      this.$nextTick(() => {
+        this.$refs.vuetable.refresh();
+      });
+    },
+    limpiar() {
+      this.filter = "";
+      this.setFilter("");
     },
   },
 };
