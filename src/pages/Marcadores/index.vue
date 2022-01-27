@@ -104,10 +104,11 @@
         <b-form-group
           :label="isMapa?'Mostrar en el mapa:':'Mostrar ubicación en Google Maps'"
           label-for="mostrar"
+          v-show="isAQP"
         >
           <div class="media-body text-left icon-state">
             <label class="switch">
-              <input type="checkbox" v-model="form.mostrar" />
+              <input type="checkbox" v-model="form.mostrar" @change="mostrarMapa($event)" />
               <span class="switch-state"></span>
             </label>
           </div>
@@ -290,7 +291,6 @@ export default {
         form.longitud = null;
       }
 
-      console.log(form);
       if (this.modal.action.create) {
         dispatch("marcadores/addMarcador", form).then(() => {
           this.resetForm();
@@ -334,9 +334,9 @@ export default {
       }
     },
     mostrarMapa(event) {
-      if (this.form.lugar == "AREQUIPA") {
-        this.isMapa = event.target.checked;
-      }
+      // if (this.form.lugar == "AREQUIPA") {
+      //   this.isMapa = event.target.checked;
+      // }
     },
     deleteAlert(row) {
       this.$swal({

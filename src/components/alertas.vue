@@ -6,7 +6,7 @@
     @click.stop="goMap"
   >
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{datos.tipo}}</h5>
+      <h5 class="mb-1" :style="css">{{datos.tipo}}</h5>
       <small class="text-muted">
         <b-button variant="primary" v-if="enviados" @click.stop="atendido">Atendido</b-button>
         <b-dropdown variant="primary" id="dropdown-1" text="Acciones" size="sm" right v-else>
@@ -88,7 +88,7 @@ export default {
       this.$emit("enviado", this.datos.id);
     },
     atendido() {
-      this.$emit("atendido", this.datos.id);
+      this.$emit("atendido", this.datos);
     },
     bloquear() {
       this.$emit("bloquear", this.datos.usuarioId, this.datos.id);

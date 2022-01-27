@@ -78,6 +78,18 @@
       @ok="submitForm"
     >
       <b-form>
+        <b-form-group id="input-personal" label="Personal:" label-for="personal">
+          <b-form-select disabled>
+            <b-form-select-option>{{personalText}}</b-form-select-option>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
+          <b-form-select disabled>
+            <b-form-select-option>{{unidadText}}</b-form-select-option>
+          </b-form-select>
+        </b-form-group>
+
         <b-form-group id="input-observacion" label="Observación:" label-for="observacion">
           <b-form-textarea
             id="observacion"
@@ -260,6 +272,8 @@ export default {
           value: "PATRULLAJE",
         },
       ],
+      personalText: null,
+      unidadText: null,
     };
   },
   validations: {
@@ -357,8 +371,10 @@ export default {
       this.formPersonal.id = id;
       this.$bvModal.show("modal-enviado");
     },
-    atendido(id) {
-      this.form.id = id;
+    atendido(datos) {
+      this.personalText = datos.personal;
+      this.unidadText = datos.unidad;
+      this.form.id = datos.id;
       this.$bvModal.show("modal-atendido");
     },
     bloquear(usuarioId, id) {
@@ -391,11 +407,11 @@ export default {
         querySnapshot.forEach(function (doc) {
           if (mover) {
             let data = doc.data();
-            const peresonal = getters["personal/getPersonal"](
+            const personal = getters["personal/getPersonal"](
               form.personalSeguridad
             );
             const unidad = getters["unidad/getUnidad"](form.unidad);
-            data["personal"] = peresonal.text;
+            data["personal"] = personal.text;
             data["unidad"] = unidad.text;
             db.collection("enviados").doc(doc.id).set(data);
           }
