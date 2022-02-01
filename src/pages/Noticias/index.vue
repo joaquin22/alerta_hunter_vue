@@ -129,6 +129,9 @@ export default {
           label: "Título",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "fecha",

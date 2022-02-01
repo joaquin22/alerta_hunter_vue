@@ -6,7 +6,7 @@
     @click.stop="goMap"
   >
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1" :style="css">{{datos.tipo}}</h5>
+      <h5 class="mb-1" :style="css">{{datos.tipo |uppercase}}</h5>
       <small class="text-muted">
         <b-button variant="primary" v-if="enviados" @click.stop="atendido">Atendido</b-button>
         <b-dropdown variant="primary" id="dropdown-1" text="Acciones" size="sm" right v-else>
@@ -17,11 +17,11 @@
       </small>
     </div>
 
-    <p class="mb-1" :style="css">Nombres: {{datos.nombre}}</p>
+    <p class="mb-1" :style="css">Nombres: {{datos.nombre | uppercase}}</p>
     <p class="mb-1" :style="css">Nro. Documento: {{datos.dni}}</p>
-    <p class="mb-1" :style="css">Telefono: {{datos.telefono}}</p>
-    <p class="mb-1" v-show="datos.personal" :style="css">Personal: {{datos.personal}}</p>
-    <p class="mb-1" v-show="datos.unidad" :style="css">Unidad: {{datos.unidad}}</p>
+    <p class="mb-1" :style="css">Teléfono: {{datos.telefono}}</p>
+    <p class="mb-1" v-show="datos.personal" :style="css">Personal: {{datos.personal | uppercase}}</p>
+    <p class="mb-1" v-show="datos.unidad" :style="css">Unidad: {{datos.unidad | uppercase}}</p>
     <p class="mb-1" :style="css">Ubicación: {{datos.ubicacion}}</p>
   </b-list-group-item>
   <!-- <b-card class="card-alertas" :style="{ 'background-color': datos.color }" @click.stop="goMap">
@@ -59,6 +59,8 @@ export default {
           ubicacion: "",
           nivel: "",
           color: "primary",
+          personal: "",
+          unidad: "",
         };
       },
     },
@@ -73,6 +75,12 @@ export default {
         color: "white",
       },
     };
+  },
+  filters: {
+    uppercase: function (value) {
+      if (value) return value.toUpperCase();
+      return value;
+    },
   },
   methods: {
     goMap() {

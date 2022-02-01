@@ -112,12 +112,18 @@ export default {
           label: "Nombres",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "apellidos",
           label: "Apellidos",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         { key: "actions", label: "Acciones" },
       ],

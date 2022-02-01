@@ -102,6 +102,9 @@ export default {
           title: "Nombres",
           titleClass: "",
           sortField: "nombreCompleto",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           name: "telefono",
@@ -114,12 +117,21 @@ export default {
           title: "Dirección",
           titleClass: "",
           sortField: "direccion",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           name: "dni",
           title: "DNI",
           titleClass: "",
           sortField: "dni",
+        },
+        {
+          name: "calificacion",
+          title: "Calificación",
+          titleClass: "",
+          sortField: "calificacion",
         },
         {
           name: "estado",

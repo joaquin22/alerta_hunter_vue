@@ -21,7 +21,7 @@
                 </b-col>
 
                 <b-col xl="6">
-                  <json-excel :data="incidentes" :fields="json_fields" name="incidentes.xlsx">
+                  <json-excel :data="incidentes" :fields="json_fields" name="incidentes.xls">
                     <a class="btn btn-primary pull-right m-l-10">Exportar Excel</a>
                   </json-excel>
                 </b-col>
@@ -60,7 +60,7 @@
     <b-modal id="info-modal" title="Información" class="theme-modal" centered>
       <p>
         <strong>Ciudadano:</strong>
-        {{datos.ciudadano}}
+        {{datos.ciudadano | uppercase}}
       </p>
       <p>
         <strong>Dni:</strong>
@@ -76,7 +76,7 @@
       </p>
       <p>
         <strong>Tipo de Incidente:</strong>
-        {{datos.incidente}}
+        {{datos.incidente | uppercase}}
       </p>
       <p>
         <strong>Calificación:</strong>
@@ -84,27 +84,27 @@
       </p>
       <p>
         <strong>Estado:</strong>
-        {{datos.estado}}
+        {{datos.estado | uppercase}}
       </p>
       <p>
         <strong>Tipo de Origen:</strong>
-        {{datos.origen}}
+        {{datos.origen | uppercase}}
       </p>
       <p>
         <strong>Usuario que Atendio:</strong>
-        {{datos.usuario}}
+        {{datos.usuario | uppercase}}
       </p>
       <p>
         <strong>Personal:</strong>
-        {{datos.personal}}
+        {{datos.personal | uppercase}}
       </p>
       <p>
         <strong>Unidad:</strong>
-        {{datos.unidad}}
+        {{datos.unidad | uppercase}}
       </p>
       <p>
         <strong>Observación:</strong>
-        {{datos.observación}}
+        {{datos.observación | uppercase}}
       </p>
     </b-modal>
   </div>
@@ -129,6 +129,9 @@ export default {
           label: "Ciudadano",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "fechaCreacion",
@@ -141,6 +144,9 @@ export default {
           label: "Incidente",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "calificacion",
@@ -153,12 +159,18 @@ export default {
           label: "Estado",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "tipoOrigen_display",
           label: "Tipo de origen",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         { key: "actions", label: "Acciones" },
       ],
@@ -202,6 +214,12 @@ export default {
         return state.incidentes.incidentes;
       },
     }),
+  },
+  filters: {
+    uppercase: function (value) {
+      if (value) return value.toUpperCase();
+      return value;
+    },
   },
   created() {
     this.getData();

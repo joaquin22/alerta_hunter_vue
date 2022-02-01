@@ -20,6 +20,7 @@
               <b-table
                 striped
                 hover
+                responsive
                 :items="usuarios"
                 :fields="fields"
                 :current-page="currentPage"
@@ -145,18 +146,27 @@ export default {
           label: "Nombres",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value.toUpperCase();
+          },
         },
         {
           key: "last_name",
           label: "Apellidos",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value.toUpperCase();
+          },
         },
         {
           key: "email",
           label: "E-mail",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value.toUpperCase();
+          },
         },
         { key: "actions", label: "Acciones" },
       ],

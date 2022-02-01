@@ -137,18 +137,27 @@ export default {
           label: "Nombre",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "area",
           label: "Área",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "nivel",
           label: "Nivel",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         { key: "actions", label: "Acciones" },
       ],

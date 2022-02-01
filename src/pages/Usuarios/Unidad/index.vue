@@ -112,12 +112,18 @@ export default {
           label: "Número",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "placa",
           label: "Placa",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         { key: "actions", label: "Acciones" },
       ],

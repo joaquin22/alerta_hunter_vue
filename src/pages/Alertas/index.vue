@@ -76,18 +76,19 @@
       ok-title="Guardar"
       class="theme-modal"
       @ok="submitForm"
+      @hidden="resetForm"
     >
       <b-form>
         <b-form-group id="input-personal" label="Personal:" label-for="personal">
-          <b-form-select disabled>
-            <b-form-select-option>{{personalText}}</b-form-select-option>
-          </b-form-select>
+          <b-form-input type="text" disabled v-model="personalText"></b-form-input>
         </b-form-group>
 
         <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
-          <b-form-select disabled>
-            <b-form-select-option>{{unidadText}}</b-form-select-option>
-          </b-form-select>
+          <b-form-input type="text" disabled v-model="unidadText"></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="input-calificacion" label="Calificación:" label-for="calificacion">
+          <star-rating :max-rating="5" :star-size="30" v-model="form.calificacionCiudadano"></star-rating>
         </b-form-group>
 
         <b-form-group id="input-observacion" label="Observación:" label-for="observacion">
@@ -208,6 +209,7 @@
 </template>
 
 <script>
+import StarRating from "vue-star-rating";
 import { mapState } from "vuex";
 import markerMaps from "@/components/Maps/markerMaps.vue";
 import alertas from "@/components/alertas.vue";
@@ -226,6 +228,7 @@ export default {
     markerMaps,
     VuePerfectScrollbar,
     alertas,
+    StarRating,
   },
   data() {
     return {
@@ -245,6 +248,7 @@ export default {
         estado: "ATENDIDO",
         atendidoSerenazgo: true,
         usuario: null,
+        calificacionCiudadano: 1,
       },
       formPersonal: {
         id: null,
@@ -325,6 +329,13 @@ export default {
         tipoIncidente: null,
       };
 
+      this.formPersonal = {
+        id: null,
+        personalSeguridad: null,
+        unidad: null,
+        estado: "ENVIADO",
+      };
+
       this.$nextTick(() => {
         this.$v.$reset();
       });
@@ -372,6 +383,7 @@ export default {
       this.$bvModal.show("modal-enviado");
     },
     atendido(datos) {
+      // console.log(datos);
       this.personalText = datos.personal;
       this.unidadText = datos.unidad;
       this.form.id = datos.id;
@@ -384,12 +396,7 @@ export default {
         datos: { estado: "BLOQUEADO" },
       };
       dispatch("ciudadanos/updateCiudadanos", payloadUser);
-      const payload = {
-        id: id,
-        datos: { estado: "CERRADO" },
-      };
-      dispatch("incidentes/updateIncidentes", payload);
-      this.eliminarFireStore(payload, "incidentes");
+      this.eliminarBloqueados(usuarioId);
     },
     fuera(id) {
       const { dispatch } = this.$store;
@@ -415,6 +422,21 @@ export default {
             data["unidad"] = unidad.text;
             db.collection("enviados").doc(doc.id).set(data);
           }
+          doc.ref.delete();
+        });
+      });
+    },
+    eliminarBloqueados(id) {
+      const { dispatch } = this.$store;
+      var docData = db.collection("incidentes").where("usuarioId", "==", id);
+      docData.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const id = doc.data().id;
+          const payload = {
+            id: id,
+            datos: { estado: "CERRADO" },
+          };
+          dispatch("incidentes/updateIncidentes", payload);
           doc.ref.delete();
         });
       });

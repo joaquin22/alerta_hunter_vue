@@ -115,6 +115,9 @@ export default {
           label: "Nombre",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "imagen",
@@ -216,7 +219,7 @@ export default {
       this.edit = true;
       this.updateId = item.id;
       this.$bvModal.show("modal-6");
-      this.modal.title = "Editar Serenazgo";
+      this.modal.title = "Editar Tipo de Marcador";
     },
     showToast(mensaje, icono, type) {
       this.$toasted.show(mensaje, {

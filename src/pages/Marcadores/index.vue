@@ -170,6 +170,9 @@ export default {
           label: "Nombre",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "lugar",
@@ -188,6 +191,9 @@ export default {
           label: "Dirección",
           sortable: true,
           sortDirection: "desc",
+          formatter: (value) => {
+            return value ? value.toUpperCase() : value;
+          },
         },
         {
           key: "estado",
