@@ -129,6 +129,9 @@ export default {
     },
   },
   created() {
+    if (Notification.permission !== "denied") {
+      Notification.requestPermission();
+    }
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
     this.resized = this.sidebar_toggle_var;

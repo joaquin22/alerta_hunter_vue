@@ -278,6 +278,7 @@ export default {
       ],
       personalText: null,
       unidadText: null,
+      alertasLen: 0,
     };
   },
   validations: {
@@ -297,8 +298,11 @@ export default {
       return this.marker;
     },
   },
+  mounted() {
+    // this.getIncidentes();
+    this.getIncidentesLen();
+  },
   created() {
-    this.getIncidentes();
     this.getEnviados();
     this.getPersonal();
     this.getUnidad();
@@ -348,10 +352,22 @@ export default {
       const { dispatch } = this.$store;
       dispatch("unidad/getUnidad");
     },
+    getIncidentesLen() {
+      db.collection("incidentes")
+        .get()
+        .then((doc) => {
+          this.alertasLen = doc.size;
+          this.getIncidentes();
+        });
+    },
     getIncidentes() {
       db.collection("incidentes")
         .orderBy("id", "desc")
         .onSnapshot((querySnapshot) => {
+          if (querySnapshot.size > this.alertasLen) {
+            this.showNotification();
+            this.alertasLen = querySnapshot.size;
+          }
           this.alertas = [];
           querySnapshot.forEach((doc) => {
             const data = doc.data();
@@ -481,6 +497,19 @@ export default {
       dispatch("incidentes/updateIncidentes", payload);
       this.eliminarFireStore(formPersonal, "incidentes", true);
       this.resetForm();
+    },
+    showNotification() {
+      if (Notification.permission === "granted") {
+        const notification = new Notification("Nuevo alerta", {
+          body: "Se ha registrado una nueva alerta",
+          icon: "yourimageurl.png",
+        });
+        notification.onclick = () => {
+          window.location.href = "https://www.hunterseguro.com/app/alertas";
+        };
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission();
+      }
     },
   },
 };
