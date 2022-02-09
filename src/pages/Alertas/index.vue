@@ -100,6 +100,15 @@
             max-rows="6"
           ></b-form-textarea>
         </b-form-group>
+
+        <b-form-group id="input-imagen" label="Imagen de evidencia:" label-for="imagen">
+          <b-form-file
+            @change="handleFileUpload( $event )"
+            placeholder="Seleccione una imagen..."
+            drop-placeholder="Drop file here..."
+            browse-text="Buscar"
+          ></b-form-file>
+        </b-form-group>
       </b-form>
     </b-modal>
 
@@ -249,6 +258,7 @@ export default {
         atendidoSerenazgo: true,
         usuario: null,
         calificacionCiudadano: 1,
+        imagen: null,
       },
       formPersonal: {
         id: null,
@@ -309,6 +319,9 @@ export default {
     this.getData();
   },
   methods: {
+    handleFileUpload(e) {
+      this.form.imagen = e.target.files[0];
+    },
     validateState(name) {
       const { $dirty, $error } = this.$v.formIncidente[name];
       return $dirty ? !$error : null;
@@ -320,6 +333,7 @@ export default {
         estado: "ATENDIDO",
         atendidoSerenazgo: true,
         usuario: null,
+        imagen: null,
       };
 
       this.formIncidente = {
@@ -460,12 +474,19 @@ export default {
     submitForm() {
       const { dispatch } = this.$store;
       const { form } = this;
+      let formData = new FormData();
+
       form.usuario = this.$store.state.authentication.user.id;
+      formData.append("observacion", form.observacion);
+      formData.append("estado", form.estado);
+      formData.append("atendidoSerenazgo", form.atendidoSerenazgo);
+      formData.append("usuario", form.usuario);
+      if (form.imagen) formData.append("imagen", form.imagen);
       const payload = {
         id: form.id,
-        datos: form,
+        datos: formData,
       };
-      dispatch("incidentes/updateIncidentes", payload);
+      dispatch("incidentes/imagenIncidentes", payload);
       this.eliminarFireStore(form, "enviados");
       this.resetForm();
     },

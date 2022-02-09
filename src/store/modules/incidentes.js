@@ -64,6 +64,9 @@ const actions = {
     updateIncidentes(_, payload) {
         incidenteService.updateIncidentes(payload)
     },
+    imagenIncidentes(_, payload) {
+        incidenteService.imagenIncidentes(payload)
+    },
     getIncidentes({
         commit
     }) {

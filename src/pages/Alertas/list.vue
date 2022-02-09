@@ -106,6 +106,12 @@
         <strong>Observación:</strong>
         {{datos.observación | uppercase}}
       </p>
+      <p>
+        <strong>Imagen de evidencia:</strong>
+        <br />
+        <b-img v-if="datos.imagen" :src="datos.imagen" fluid v-bind="mainProps"></b-img>
+        <label v-else>No subio una imagen</label>
+      </p>
     </b-modal>
   </div>
 </template>
@@ -122,6 +128,7 @@ export default {
   },
   data() {
     return {
+      mainProps: { width: 200, height: 200 },
       tablefields: [
         { key: "id", label: "ID", sortable: true, sortDirection: "desc" },
         {
@@ -205,6 +212,7 @@ export default {
         personal: "",
         unidad: "",
         observación: "",
+        imagen: "",
       },
     };
   },
@@ -250,6 +258,7 @@ export default {
         personal: item.personal_display,
         unidad: item.unidad_display,
         observación: item.observacion,
+        imagen: item.imagen,
       };
     },
   },
