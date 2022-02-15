@@ -13,6 +13,7 @@ import Toasted from 'vue-toasted';
 
 import PxCard from './components/Pxcard.vue'
 import * as VueGoogleMaps from 'vue2-google-maps';
+import VueExpandableImage from "vue-expandable-image";
 Vue.component(PxCard.name, PxCard)
 
 // Import Theme scss
@@ -23,6 +24,7 @@ Vue.use(VueFeather);
 Vue.use(BootstrapVue)
 Vue.use(SmartTable);
 Vue.use(VueSweetalert2);
+Vue.use(VueExpandableImage)
 Vue.component('Breadcrumbs', Breadcrumbs)
 Vue.use(Toasted, {
   iconPack: 'fontawesome'

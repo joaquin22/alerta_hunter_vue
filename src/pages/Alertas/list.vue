@@ -109,8 +109,15 @@
       <p>
         <strong>Imagen de evidencia:</strong>
         <br />
-        <b-img v-if="datos.imagen" :src="datos.imagen" fluid v-bind="mainProps"></b-img>
+        <expandable-image v-if="datos.imagen" :src="datos.imagen" :closeOnBackgroundClick="true" />
         <label v-else>No subio una imagen</label>
+        <!-- <b-img
+          v-if="datos.imagen"
+          :src="datos.imagen"
+          fluid
+          v-bind="mainProps"
+          @click="mostrarImagen(datos.imagen)"
+        ></b-img>-->
       </p>
     </b-modal>
   </div>
@@ -120,7 +127,6 @@
 import StarRating from "vue-star-rating";
 import { mapState } from "vuex";
 import JsonExcel from "vue-json-excel";
-
 export default {
   components: {
     StarRating,
@@ -260,6 +266,15 @@ export default {
         observación: item.observacion,
         imagen: item.imagen,
       };
+    },
+    mostrarImagen(url) {
+      this.$swal({
+        title: "Evidencia",
+        imageUrl: url,
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: "Custom image",
+      });
     },
   },
 };
