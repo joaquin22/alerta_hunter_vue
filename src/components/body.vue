@@ -18,7 +18,7 @@
             <router-view class="view"></router-view>
           </transition>
         </div>
-        <Footer />
+        <!-- <Footer /> -->
       </div>
       <!-- <Customizer/> -->
       <!-- <TapTop/> -->
@@ -31,7 +31,7 @@ import { mapState } from "vuex";
 import { layoutClasses } from "../constants/layout";
 import Header from "./header";
 import Sidebar from "./sidebar.vue";
-import Footer from "./footer";
+// import Footer from "./footer";
 // import Customizer from './customizer';
 // import TapTop from './taptop';
 
@@ -41,7 +41,7 @@ export default {
   components: {
     Header,
     Sidebar,
-    Footer,
+    // Footer,
     // Customizer,
     // TapTop
   },

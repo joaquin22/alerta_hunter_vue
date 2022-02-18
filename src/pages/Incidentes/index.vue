@@ -116,10 +116,7 @@ export default {
         area: null,
         nivel: null,
       },
-      tipoArea: [
-        { value: "SERENAZGO", text: "Serenazgo" },
-        { value: "COMUNAL", text: "Comunal" },
-      ],
+      tipoArea: [{ value: "SERENAZGO", text: "Serenazgo" }],
       niveles: [
         { value: "BAJA", text: "Baja" },
         { value: "MEDIA", text: "Media" },

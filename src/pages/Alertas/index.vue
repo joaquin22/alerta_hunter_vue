@@ -480,6 +480,7 @@ export default {
       formData.append("observacion", form.observacion);
       formData.append("estado", form.estado);
       formData.append("atendidoSerenazgo", form.atendidoSerenazgo);
+      formData.append("calificacionCiudadano", form.calificacionCiudadano);
       formData.append("usuario", form.usuario);
       if (form.imagen) formData.append("imagen", form.imagen);
       const payload = {
