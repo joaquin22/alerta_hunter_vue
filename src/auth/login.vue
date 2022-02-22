@@ -34,7 +34,7 @@
                       dismissible
                       class="alert alert-danger dark alert-dismissible"
                       v-show="hasError"
-                    >Usuario y/o contraseñas incorrectos.</b-alert>
+                    >{{errorMessage}}</b-alert>
                     <form class="theme-form" @submit.prevent="handleSubmit">
                       <div class="form-group">
                         <label for="username">Usuario</label>
@@ -92,6 +92,7 @@ export default {
       type: "password",
       username: "",
       passwordjwt: "",
+      clientIp: "",
       submitted: false,
       imgProps: {
         width: 100,
@@ -106,19 +107,27 @@ export default {
     hasError() {
       return this.$store.state.alert.hasError;
     },
+    errorMessage() {
+      return this.$store.state.alert.message;
+    },
   },
   created() {
     // reset login status for JWT
+    fetch("https://api.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((response) => {
+        this.clientIp = response.ip;
+      });
     this.$store.dispatch("authentication/logout");
   },
   methods: {
     // JWT authentication
     handleSubmit() {
       this.submitted = true;
-      const { username, passwordjwt } = this;
+      const { username, passwordjwt, clientIp } = this;
       const { dispatch } = this.$store;
       if (username && passwordjwt) {
-        dispatch("authentication/login", { username, passwordjwt });
+        dispatch("authentication/login", { username, passwordjwt, clientIp });
       }
     },
     // show/hide password

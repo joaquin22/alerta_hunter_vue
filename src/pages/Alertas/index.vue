@@ -174,15 +174,26 @@
             placeholder="Telefono"
             v-model="formIncidente.telefono"
           ></b-form-input>
-          <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
+          <b-form-invalid-feedback
+            id="input-2-live-feedback"
+            v-if="!$v.formIncidente.telefono.required"
+          >Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-origen" label="Tipo de Origen:" label-for="origen">
-          <b-form-select :options="origen" v-model="formIncidente.tipoOrigen">
+          <v-select
+            placeholder="Seleccione una opción"
+            :searchable="false"
+            :options="origen"
+            :reduce="country => country.value"
+            label="text"
+            v-model="formIncidente.tipoOrigen"
+          ></v-select>
+          <!-- <b-form-select :options="origen" v-model="formIncidente.tipoOrigen">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
             </template>
-          </b-form-select>
+          </b-form-select>-->
         </b-form-group>
 
         <b-form-group
@@ -190,27 +201,48 @@
           label="Tipo de Incidente:"
           label-for="tipo-incidente"
         >
-          <b-form-select :options="incidentes" v-model="formIncidente.tipoIncidente">
+          <v-select
+            placeholder="Seleccione una opción"
+            :options="incidentes"
+            :reduce="country => country.value"
+            label="text"
+            v-model="formIncidente.tipoIncidente"
+          ></v-select>
+          <!-- <b-form-select :options="incidentes" v-model="formIncidente.tipoIncidente">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
             </template>
-          </b-form-select>
+          </b-form-select>-->
         </b-form-group>
 
         <b-form-group id="input-personal" label="Personal:" label-for="personal">
-          <b-form-select :options="personal" v-model="formIncidente.personalSeguridad">
+          <v-select
+            placeholder="Seleccione una opción"
+            :options="personal"
+            :reduce="country => country.value"
+            label="text"
+            v-model="formIncidente.personalSeguridad"
+          ></v-select>
+          <!-- <b-form-select :options="personal" v-model="formIncidente.personalSeguridad">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
             </template>
-          </b-form-select>
+          </b-form-select>-->
         </b-form-group>
 
         <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
-          <b-form-select :options="unidad" v-model="formIncidente.unidad">
+          <v-select
+            placeholder="Seleccione una opción"
+            :options="unidad"
+            :reduce="country => country.value"
+            label="text"
+            v-model="formIncidente.unidad"
+          ></v-select>
+          <!-- <b-form-select :options="unidad" v-model="formIncidente.unidad">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
             </template>
-          </b-form-select>
+          </b-form-select>-->
         </b-form-group>
       </b-form>
     </b-modal>
@@ -218,6 +250,9 @@
 </template>
 
 <script>
+import "vue-select/dist/vue-select.css";
+
+import vSelect from "vue-select";
 import StarRating from "vue-star-rating";
 import { mapState } from "vuex";
 import markerMaps from "@/components/Maps/markerMaps.vue";
@@ -238,6 +273,7 @@ export default {
     VuePerfectScrollbar,
     alertas,
     StarRating,
+    vSelect,
   },
   data() {
     return {
@@ -291,12 +327,22 @@ export default {
       alertasLen: 0,
     };
   },
-  validations: {
-    formIncidente: {
-      telefono: {
-        required,
-      },
-    },
+  validations() {
+    if (this.formIncidente.tipoOrigen == "PATRULLAJE") {
+      return {
+        formIncidente: {
+          telefono: {},
+        },
+      };
+    } else {
+      return {
+        formIncidente: {
+          telefono: {
+            required,
+          },
+        },
+      };
+    }
   },
   computed: {
     ...mapState({

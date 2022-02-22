@@ -14,7 +14,7 @@ export const userService = {
 
 };
 
-function login(username, password) {
+function login(username, password, clientIp) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -22,7 +22,8 @@ function login(username, password) {
         },
         body: JSON.stringify({
             username,
-            password
+            password,
+            clientIp
         })
     };
 
@@ -61,7 +62,8 @@ function handleResponse(response) {
             //     logout();
             //     location.reload(true);
             // }
-            const error = (data && data.message) || response.statusText;
+            const msg = data.detail || data.non_field_errors[0]
+            const error = (data && msg) || response.statusText;
             return Promise.reject(error);
         }
 

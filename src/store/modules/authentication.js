@@ -26,12 +26,13 @@ export const authentication = {
             commit
         }, {
             username,
-            passwordjwt
+            passwordjwt,
+            clientIp
         }) {
             commit('loginRequest', {
                 username
             });
-            userService.login(username, passwordjwt)
+            userService.login(username, passwordjwt, clientIp)
                 .then(
                     user => {
                         commit('loginSuccess', user);
