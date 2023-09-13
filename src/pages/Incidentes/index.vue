@@ -9,38 +9,24 @@
             <div class="card-header">
               <h5>
                 Incidentes
-                <a
-                  v-b-modal.modal-6
-                  class="btn btn-primary pull-right m-l-10"
-                  @click="modal.title = 'Nuevo Tipo de Incidente'"
-                >Añadir nuevo Tipo de Incidente</a>
+                <a v-b-modal.modal-6 class="btn btn-secondary pull-right m-l-10"
+                  @click="modal.title = 'Nuevo Tipo de Incidente'">Añadir nuevo Tipo de Incidente</a>
               </h5>
             </div>
             <div class="card-body">
-              <b-table
-                striped
-                hover
-                :items="incidentes"
-                :fields="fields"
-                :current-page="currentPage"
-                :per-page="perPage"
-              >
+              <b-table striped hover :items="incidentes" :fields="fields" :current-page="currentPage" :per-page="perPage">
                 <template #cell(actions)="row">
                   <b-button variant="danger" class="mb-3 mr-1" @click="deleteModal(row.item)">
                     <i class="fa fa-trash pr-0"></i>
                   </b-button>
-                  <b-button variant="primary" class="mb-3 mr-1" @click="editModal(row.item)">
+                  <b-button variant="secondary" class="mb-3 mr-1" @click="editModal(row.item)">
                     <i class="fa fa-pencil pr-0"></i>
                   </b-button>
                 </template>
               </b-table>
               <b-col md="6" class="p-0">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="incidentes.length"
-                  :per-page="perPage"
-                  class="my-0"
-                ></b-pagination>
+                <b-pagination v-model="currentPage" :total-rows="incidentes.length" :per-page="perPage"
+                  class="my-0"></b-pagination>
               </b-col>
             </div>
           </div>
@@ -49,34 +35,17 @@
     </div>
     <!-- Container-fluid Ends-->
     <!-- MODAL ADD -->
-    <b-modal
-      id="modal-6"
-      :title="modal.title"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-      @hidden="resetForm"
-      @ok="submitForm"
-    >
+    <b-modal id="modal-6" :title="modal.title" cancel-title="Cancelar" ok-title="Guardar" class="theme-modal"
+      @hidden="resetForm" @ok="submitForm">
       <b-form>
         <b-form-group id="input-titulo" label="Titulo:" label-for="titulo">
-          <b-form-input
-            :state="validateState('titulo')"
-            id="titulo"
-            type="text"
-            placeholder="Nombre"
-            v-model="form.titulo"
-          ></b-form-input>
+          <b-form-input :state="validateState('titulo')" id="titulo" type="text" placeholder="Nombre"
+            v-model="form.titulo"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Falta el nombre del incidente.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-area" label="Área:" label-for="area">
-          <b-form-select
-            :state="validateState('area')"
-            id="area"
-            v-model="form.area"
-            :options="tipoArea"
-          >
+          <b-form-select :state="validateState('area')" id="area" v-model="form.area" :options="tipoArea">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
             </template>
@@ -85,12 +54,7 @@
         </b-form-group>
 
         <b-form-group id="input-nivel" label="Nivel:" label-for="nivel">
-          <b-form-select
-            :state="validateState('nivel')"
-            id="nivel"
-            v-model="form.nivel"
-            :options="niveles"
-          >
+          <b-form-select :state="validateState('nivel')" id="nivel" v-model="form.nivel" :options="niveles">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
             </template>

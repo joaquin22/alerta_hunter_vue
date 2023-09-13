@@ -8,7 +8,7 @@
             <template #header>
               <h4 class="mb-0">
                 Mapa
-                <a v-b-modal.modal-alertas class="btn btn-primary pull-right">Añadir Nuevo</a>
+                <a v-b-modal.modal-alertas class="btn btn-secondary pull-right">Añadir Nuevo</a>
               </h4>
             </template>
             <b-card-text class="mb-0">
@@ -22,21 +22,14 @@
               <b-tab no-body>
                 <template #title>
                   Alertas
-                  <label class="badge badge-primary">{{alertas.length}}</label>
+                  <label class="badge badge-primary">{{ alertas.length }}</label>
                 </template>
 
-                <b-alert :show="alertas.length==0" variant="info">No hay mas alertas por atender</b-alert>
+                <b-alert :show="alertas.length == 0" variant="info">No hay mas alertas por atender</b-alert>
                 <VuePerfectScrollbar class="scroll-area" :settings="settings6">
                   <b-list-group>
-                    <alertas
-                      v-for="a in alertas"
-                      :key="a.id"
-                      :datos="a"
-                      @goMap="goMap"
-                      @enviado="enviado"
-                      @bloquear="bloquear"
-                      @fuera="fuera"
-                    />
+                    <alertas v-for="a in alertas" :key="a.id" :datos="a" @goMap="goMap" @enviado="enviado"
+                      @bloquear="bloquear" @fuera="fuera" />
                   </b-list-group>
                 </VuePerfectScrollbar>
               </b-tab>
@@ -44,22 +37,13 @@
               <b-tab no-body>
                 <template #title>
                   Enviados
-                  <label class="badge badge-primary">{{enviados.length}}</label>
+                  <label class="badge badge-primary">{{ enviados.length }}</label>
                 </template>
-                <b-alert :show="enviados.length==0" variant="info">No hay mas alertas</b-alert>
+                <b-alert :show="enviados.length == 0" variant="info">No hay mas alertas</b-alert>
                 <VuePerfectScrollbar class="scroll-area" :settings="settings6">
                   <b-list-group>
-                    <alertas
-                      v-for="a in enviados"
-                      :key="a.id"
-                      :datos="a"
-                      :enviados="true"
-                      @goMap="goMap"
-                      @enviado="enviado"
-                      @atendido="atendido"
-                      @bloquear="bloquear"
-                      @fuera="fuera"
-                    />
+                    <alertas v-for="a in enviados" :key="a.id" :datos="a" :enviados="true" @goMap="goMap"
+                      @enviado="enviado" @atendido="atendido" @bloquear="bloquear" @fuera="fuera" />
                   </b-list-group>
                 </VuePerfectScrollbar>
               </b-tab>
@@ -69,15 +53,8 @@
       </div>
     </div>
 
-    <b-modal
-      id="modal-atendido"
-      title="Atendido"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-      @ok="submitForm"
-      @hidden="resetForm"
-    >
+    <b-modal id="modal-atendido" title="Atendido" cancel-title="Cancelar" ok-title="Guardar" class="theme-modal"
+      @ok="submitForm" @hidden="resetForm">
       <b-form>
         <b-form-group id="input-personal" label="Personal:" label-for="personal">
           <b-form-input type="text" disabled v-model="personalText"></b-form-input>
@@ -92,36 +69,20 @@
         </b-form-group>
 
         <b-form-group id="input-observacion" label="Observación:" label-for="observacion">
-          <b-form-textarea
-            id="observacion"
-            v-model="form.observacion"
-            placeholder="Observación"
-            rows="3"
-            max-rows="6"
-          ></b-form-textarea>
+          <b-form-textarea id="observacion" v-model="form.observacion" placeholder="Observación" rows="3"
+            max-rows="6"></b-form-textarea>
         </b-form-group>
 
         <b-form-group id="input-imagen" label="Imagen de evidencia:" label-for="imagen">
-          <b-form-file
-            @change="handleFileUpload( $event )"
-            placeholder="Seleccione una imagen..."
-            drop-placeholder="Drop file here..."
-            browse-text="Buscar"
-          ></b-form-file>
+          <b-form-file @change="handleFileUpload($event)" placeholder="Seleccione una imagen..."
+            drop-placeholder="Drop file here..." browse-text="Buscar"></b-form-file>
         </b-form-group>
       </b-form>
     </b-modal>
 
     <!-- AÑADIR PERSONAL Y UNIDADES -->
-    <b-modal
-      id="modal-enviado"
-      title="Enviar Personal"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-      @hidden="resetForm"
-      @ok="enviarPersonal"
-    >
+    <b-modal id="modal-enviado" title="Enviar Personal" cancel-title="Cancelar" ok-title="Guardar" class="theme-modal"
+      @hidden="resetForm" @ok="enviarPersonal">
       <b-form>
         <b-form-group id="input-personal" label="Personal:" label-for="personal">
           <b-form-select :options="personal" v-model="formPersonal.personalSeguridad">
@@ -143,23 +104,12 @@
 
     <!-- AÑADIR NUEVO INCIDENTE MODAL -->
 
-    <b-modal
-      id="modal-alertas"
-      title="Nuevo Incidente"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-      @hidden="resetForm"
-      @ok="handleOk"
-    >
+    <b-modal id="modal-alertas" title="Nuevo Incidente" cancel-title="Cancelar" ok-title="Guardar" class="theme-modal"
+      @hidden="resetForm" @ok="handleOk">
       <b-form>
         <b-form-group id="input-nombres" label="Nombre Completo:" label-for="nombres">
-          <b-form-input
-            id="nombres"
-            type="text"
-            placeholder="Nombre Completo"
-            v-model="formIncidente.nombres"
-          ></b-form-input>
+          <b-form-input id="nombres" type="text" placeholder="Nombre Completo"
+            v-model="formIncidente.nombres"></b-form-input>
         </b-form-group>
 
         <b-form-group id="input-dni" label="DNI:" label-for="dni">
@@ -167,28 +117,15 @@
         </b-form-group>
 
         <b-form-group id="input-telefono" label="Teléfono:" label-for="telefono">
-          <b-form-input
-            :state="validateState('telefono')"
-            id="telefono"
-            type="text"
-            placeholder="Telefono"
-            v-model="formIncidente.telefono"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            id="input-2-live-feedback"
-            v-if="!$v.formIncidente.telefono.required"
-          >Este campo es obligatorio.</b-form-invalid-feedback>
+          <b-form-input :state="validateState('telefono')" id="telefono" type="text" placeholder="Telefono"
+            v-model="formIncidente.telefono"></b-form-input>
+          <b-form-invalid-feedback id="input-2-live-feedback" v-if="!$v.formIncidente.telefono.required">Este campo es
+            obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-origen" label="Tipo de Origen:" label-for="origen">
-          <v-select
-            placeholder="Seleccione una opción"
-            :searchable="false"
-            :options="origen"
-            :reduce="country => country.value"
-            label="text"
-            v-model="formIncidente.tipoOrigen"
-          ></v-select>
+          <v-select placeholder="Seleccione una opción" :searchable="false" :options="origen"
+            :reduce="country => country.value" label="text" v-model="formIncidente.tipoOrigen"></v-select>
           <!-- <b-form-select :options="origen" v-model="formIncidente.tipoOrigen">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
@@ -196,18 +133,9 @@
           </b-form-select>-->
         </b-form-group>
 
-        <b-form-group
-          id="input-tipo-incidente"
-          label="Tipo de Incidente:"
-          label-for="tipo-incidente"
-        >
-          <v-select
-            placeholder="Seleccione una opción"
-            :options="incidentes"
-            :reduce="country => country.value"
-            label="text"
-            v-model="formIncidente.tipoIncidente"
-          ></v-select>
+        <b-form-group id="input-tipo-incidente" label="Tipo de Incidente:" label-for="tipo-incidente">
+          <v-select placeholder="Seleccione una opción" :options="incidentes" :reduce="country => country.value"
+            label="text" v-model="formIncidente.tipoIncidente"></v-select>
           <!-- <b-form-select :options="incidentes" v-model="formIncidente.tipoIncidente">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
@@ -216,13 +144,8 @@
         </b-form-group>
 
         <b-form-group id="input-personal" label="Personal:" label-for="personal">
-          <v-select
-            placeholder="Seleccione una opción"
-            :options="personal"
-            :reduce="country => country.value"
-            label="text"
-            v-model="formIncidente.personalSeguridad"
-          ></v-select>
+          <v-select placeholder="Seleccione una opción" :options="personal" :reduce="country => country.value"
+            label="text" v-model="formIncidente.personalSeguridad"></v-select>
           <!-- <b-form-select :options="personal" v-model="formIncidente.personalSeguridad">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
@@ -231,13 +154,8 @@
         </b-form-group>
 
         <b-form-group id="input-unidad" label="Unidad:" label-for="unidad">
-          <v-select
-            placeholder="Seleccione una opción"
-            :options="unidad"
-            :reduce="country => country.value"
-            label="text"
-            v-model="formIncidente.unidad"
-          ></v-select>
+          <v-select placeholder="Seleccione una opción" :options="unidad" :reduce="country => country.value" label="text"
+            v-model="formIncidente.unidad"></v-select>
           <!-- <b-form-select :options="unidad" v-model="formIncidente.unidad">
             <template #first>
               <b-form-select-option :value="null" disabled>Seleccione una opción</b-form-select-option>
@@ -588,6 +506,7 @@ export default {
 .scroll-bar-wrap {
   overflow: hidden;
 }
+
 .scroll-area {
   margin: auto;
   height: 600px;

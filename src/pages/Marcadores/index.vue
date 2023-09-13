@@ -8,43 +8,26 @@
             <div class="card-header">
               <h5>
                 Marcadores
-                <a
-                  v-b-modal.marcador-modal
-                  class="btn btn-primary pull-right m-l-10"
-                  @click="cambiarModal('HUNTER')"
-                >Añadir nuevo Marcador Hunter</a>
-                <a
-                  v-b-modal.marcador-modal
-                  class="btn btn-primary pull-right m-l-10"
-                  @click="cambiarModal('AREQUIPA')"
-                >Añadir nuevo Marcador Arequipa</a>
+                <a v-b-modal.marcador-modal class="btn btn-secondary pull-right m-l-10"
+                  @click="cambiarModal('HUNTER')">Añadir nuevo Marcador Hunter</a>
+                <a v-b-modal.marcador-modal class="btn btn-secondary pull-right m-l-10"
+                  @click="cambiarModal('AREQUIPA')">Añadir nuevo Marcador Arequipa</a>
               </h5>
             </div>
             <div class="card-body">
-              <b-table
-                striped
-                hover
-                :items="marcadores"
-                :fields="fields"
-                :current-page="currentPage"
-                :per-page="perPage"
-              >
+              <b-table striped hover :items="marcadores" :fields="fields" :current-page="currentPage" :per-page="perPage">
                 <template #cell(actions)="row">
                   <b-button variant="danger" class="mb-3 mr-1" @click="deleteAlert(row.item)">
                     <i class="fa fa-trash pr-0"></i>
                   </b-button>
-                  <b-button variant="primary" class="mb-3 mr-1" @click="editModal(row.item)">
+                  <b-button variant="secondary" class="mb-3 mr-1" @click="editModal(row.item)">
                     <i class="fa fa-pencil pr-0"></i>
                   </b-button>
                 </template>
               </b-table>
               <b-col md="6" class="p-0">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="marcadores.length"
-                  :per-page="perPage"
-                  class="my-0"
-                ></b-pagination>
+                <b-pagination v-model="currentPage" :total-rows="marcadores.length" :per-page="perPage"
+                  class="my-0"></b-pagination>
               </b-col>
             </div>
           </div>
@@ -52,60 +35,34 @@
       </div>
     </div>
     <!-- AÑADIR MARCADOR MODAL -->
-    <b-modal
-      id="marcador-modal"
-      size="lg"
-      :title="modal.title"
-      class="theme-modal"
-      centered
-      @hidden="resetForm"
-      @ok="submitForm"
-      ref="marcadorModal"
-    >
+    <b-modal id="marcador-modal" size="lg" :title="modal.title" class="theme-modal" centered @hidden="resetForm"
+      @ok="submitForm" ref="marcadorModal">
       <b-form>
         <b-form-group label="Ubicación:" label-for="ubicacion" v-show="isAQP">
           <markerMaps :marker="marker" @create="addLatLng"></markerMaps>
         </b-form-group>
 
         <b-form-group label="Nombre:" label-for="nombre">
-          <b-form-input
-            :state="validateState('nombre')"
-            id="nombre"
-            type="text"
-            placeholder="Nombre"
-            v-model="form.nombre"
-          ></b-form-input>
+          <b-form-input :state="validateState('nombre')" id="nombre" type="text" placeholder="Nombre"
+            v-model="form.nombre"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Falta el nombre del marcador.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group label="Teléfono:" label-for="telefono">
-          <b-form-input
-            :state="validateState('telefono')"
-            id="telefono"
-            type="text"
-            placeholder="Telefono"
+          <b-form-input :state="validateState('telefono')" id="telefono" type="text" placeholder="Telefono"
             v-model="form.telefono"
-            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-          ></b-form-input>
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Falta el telefono del marcador.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group label="Dirección:" label-for="direccion">
-          <b-form-input
-            :state="validateState('direccion')"
-            id="direccion"
-            type="text"
-            placeholder="Dirección"
-            v-model="form.direccion"
-          ></b-form-input>
+          <b-form-input :state="validateState('direccion')" id="direccion" type="text" placeholder="Dirección"
+            v-model="form.direccion"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Falta la dirección del marcador.</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group
-          :label="isMapa?'Mostrar en el mapa:':'Mostrar ubicación en Google Maps'"
-          label-for="mostrar"
-          v-show="isAQP"
-        >
+        <b-form-group :label="isMapa ? 'Mostrar en el mapa:' : 'Mostrar ubicación en Google Maps'" label-for="mostrar"
+          v-show="isAQP">
           <div class="media-body text-left icon-state">
             <label class="switch">
               <input type="checkbox" v-model="form.mostrar" @change="mostrarMapa($event)" />
@@ -115,16 +72,10 @@
         </b-form-group>
         <label for v-show="isAQP">Tipo de marcador</label>
         <b-list-group horizontal v-show="isAQP">
-          <b-list-group-item
-            tag="a"
-            href="#"
-            v-for="tipo in tipos"
-            :key="tipo.id"
-            @click="selectTipo(tipo.id)"
-            :class="{active:tipoSelected == tipo.id}"
-          >
+          <b-list-group-item tag="a" href="#" v-for="tipo in tipos" :key="tipo.id" @click="selectTipo(tipo.id)"
+            :class="{ active: tipoSelected == tipo.id }">
             <img :src="tipo.imagen" alt />
-            {{tipo.tipo}}
+            {{ tipo.tipo }}
           </b-list-group-item>
         </b-list-group>
         <br />

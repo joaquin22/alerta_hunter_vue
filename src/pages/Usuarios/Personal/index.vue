@@ -9,40 +9,26 @@
             <div class="card-header">
               <h5>
                 Personal
-                <a
-                  v-b-modal.modal-6
-                  class="btn btn-primary pull-right m-l-10"
-                  @click="modal.title = 'Nuevo Personal'"
-                >Añadir nuevo Personal</a>
+                <a v-b-modal.modal-6 class="btn btn-secondary pull-right m-l-10"
+                  @click="modal.title = 'Nuevo Personal'">Añadir nuevo Personal</a>
               </h5>
             </div>
             <div class="card-body">
               <div class="table-responsive datatable-vue">
-                <b-table
-                  striped
-                  hover
-                  :items="personal"
-                  :fields="fields"
-                  :current-page="currentPage"
-                  :per-page="perPage"
-                >
+                <b-table striped hover :items="personal" :fields="fields" :current-page="currentPage" :per-page="perPage">
                   <template #cell(actions)="row">
                     <b-button variant="danger" class="mb-3 mr-1" @click="deleteModal(row.item)">
                       <i class="fa fa-trash pr-0"></i>
                     </b-button>
-                    <b-button variant="primary" class="mb-3 mr-1" @click="editModal(row.item)">
+                    <b-button variant="secondary" class="mb-3 mr-1" @click="editModal(row.item)">
                       <i class="fa fa-pencil pr-0"></i>
                     </b-button>
                   </template>
                 </b-table>
               </div>
               <b-col md="6" class="p-0 mt-5">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="personal.length"
-                  :per-page="perPage"
-                  class="my-0"
-                ></b-pagination>
+                <b-pagination v-model="currentPage" :total-rows="personal.length" :per-page="perPage"
+                  class="my-0"></b-pagination>
               </b-col>
             </div>
           </div>
@@ -51,35 +37,18 @@
     </div>
     <!-- Container-fluid Ends-->
     <!-- MODAL ADD -->
-    <b-modal
-      id="modal-6"
-      :title="modal.title"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-      @hidden="resetForm"
-      @ok="submitForm"
-    >
+    <b-modal id="modal-6" :title="modal.title" cancel-title="Cancelar" ok-title="Guardar" class="theme-modal"
+      @hidden="resetForm" @ok="submitForm">
       <b-form>
         <b-form-group id="input-nombres" label="Nombres:" label-for="nombres">
-          <b-form-input
-            :state="validateState('nombres')"
-            id="nombres"
-            type="text"
-            placeholder="Nombres"
-            v-model="form.nombres"
-          ></b-form-input>
+          <b-form-input :state="validateState('nombres')" id="nombres" type="text" placeholder="Nombres"
+            v-model="form.nombres"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-apellidos" label="Apellidos:" label-for="apellidos">
-          <b-form-input
-            :state="validateState('apellidos')"
-            id="apellidos"
-            type="text"
-            placeholder="Apellidos"
-            v-model="form.apellidos"
-          ></b-form-input>
+          <b-form-input :state="validateState('apellidos')" id="apellidos" type="text" placeholder="Apellidos"
+            v-model="form.apellidos"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
       </b-form>
