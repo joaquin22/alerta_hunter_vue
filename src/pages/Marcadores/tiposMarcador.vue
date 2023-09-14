@@ -9,46 +9,27 @@
             <div class="card-header">
               <h5>
                 Tipos de Marcadores
-                <a
-                  v-b-modal.modal-6
-                  class="btn btn-primary pull-right m-l-10"
-                  @click="modal.title = 'Nuevo Tipo de Marcador'"
-                >Añadir Nuevo Tipo de Marcador</a>
+                <a v-b-modal.modal-6 class="btn btn-secondary pull-right m-l-10"
+                  @click="modal.title = 'Nuevo Tipo de Marcador'">Añadir Nuevo Tipo de Marcador</a>
               </h5>
             </div>
             <div class="card-body">
-              <b-table
-                striped
-                hover
-                :items="tipos"
-                :fields="fields"
-                :current-page="currentPage"
-                :per-page="perPage"
-              >
+              <b-table striped hover :items="tipos" :fields="fields" :current-page="currentPage" :per-page="perPage">
                 <template #cell(imagen)="row">
-                  <b-img
-                    v-bind="mainProps"
-                    rounded="circle"
-                    :src="row.item.imagen"
-                    alt="Circle image"
-                  ></b-img>
+                  <b-img v-bind="mainProps" rounded="circle" :src="row.item.imagen" alt="Circle image"></b-img>
                 </template>
                 <template #cell(actions)="row">
                   <b-button variant="danger" class="mb-3 mr-1" @click="deleteModal(row.item)">
                     <i class="fa fa-trash pr-0"></i>
                   </b-button>
-                  <b-button variant="primary" class="mb-3 mr-1" @click="editModal(row.item)">
+                  <b-button variant="secondary" class="mb-3 mr-1" @click="editModal(row.item)">
                     <i class="fa fa-pencil pr-0"></i>
                   </b-button>
                 </template>
               </b-table>
               <b-col md="6" class="p-0">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="tipos.length"
-                  :per-page="perPage"
-                  class="my-0"
-                ></b-pagination>
+                <b-pagination v-model="currentPage" :total-rows="tipos.length" :per-page="perPage"
+                  class="my-0"></b-pagination>
               </b-col>
             </div>
           </div>
@@ -57,27 +38,16 @@
     </div>
     <!-- Container-fluid Ends-->
     <!-- MODAL ADD -->
-    <b-modal
-      id="modal-6"
-      :title="modal.title"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-      @hidden="resetForm"
-      @ok="submitForm"
-    >
+    <b-modal id="modal-6" :title="modal.title" cancel-title="Cancelar" ok-title="Guardar" class="theme-modal"
+      @hidden="resetForm" @ok="submitForm">
       <b-form>
         <b-form-group id="input-tipo" label="Nombre:" label-for="tipo">
           <b-form-input id="tipo" type="text" placeholder="Nombre" v-model="form.tipo"></b-form-input>
         </b-form-group>
 
         <b-form-group id="input-tipo" label="Imagen:" label-for="tipo">
-          <b-form-file
-            @change="handleFileUpload( $event )"
-            placeholder="Seleccione una imagen..."
-            drop-placeholder="Drop file here..."
-            browse-text="Buscar"
-          ></b-form-file>
+          <b-form-file @change="handleFileUpload($event)" placeholder="Seleccione una imagen..."
+            drop-placeholder="Drop file here..." browse-text="Buscar"></b-form-file>
         </b-form-group>
       </b-form>
     </b-modal>

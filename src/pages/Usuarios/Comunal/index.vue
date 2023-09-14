@@ -9,38 +9,24 @@
             <div class="card-header">
               <h5>
                 Comunales
-                <a
-                  v-b-modal.modal-usuario
-                  class="btn btn-primary pull-right m-l-10"
-                  @click="modal.title = 'Nuevo Comunal'"
-                >Añadir nuevo Comunal</a>
+                <a v-b-modal.modal-usuario class="btn btn-secondary pull-right m-l-10"
+                  @click="modal.title = 'Nuevo Comunal'">Añadir nuevo Comunal</a>
               </h5>
             </div>
             <div class="card-body">
-              <b-table
-                striped
-                hover
-                :items="usuarios"
-                :fields="fields"
-                :current-page="currentPage"
-                :per-page="perPage"
-              >
+              <b-table striped hover :items="usuarios" :fields="fields" :current-page="currentPage" :per-page="perPage">
                 <template #cell(actions)="row">
                   <b-button variant="danger" class="mb-3 mr-1" @click="deleteModal(row.item)">
                     <i class="fa fa-trash pr-0"></i>
                   </b-button>
-                  <b-button variant="primary" class="mb-3 mr-1" @click="editModal(row.item)">
+                  <b-button variant="secondary" class="mb-3 mr-1" @click="editModal(row.item)">
                     <i class="fa fa-pencil pr-0"></i>
                   </b-button>
                 </template>
               </b-table>
               <b-col md="6" class="p-0">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="usuarios.length"
-                  :per-page="perPage"
-                  class="my-0"
-                ></b-pagination>
+                <b-pagination v-model="currentPage" :total-rows="usuarios.length" :per-page="perPage"
+                  class="my-0"></b-pagination>
               </b-col>
             </div>
           </div>
@@ -49,67 +35,33 @@
     </div>
     <!-- Container-fluid Ends-->
     <!-- MODAL ADD -->
-    <b-modal
-      id="modal-usuario"
-      :title="modal.title"
-      cancel-title="Cancelar"
-      ok-title="Guardar"
-      class="theme-modal"
-      @hidden="resetForm"
-      @ok="handleOk"
-    >
-      <b-alert
-        variant="danger"
-        dismissible
-        class="alert alert-danger dark alert-dismissible"
-        :show="error.value"
-        @dismissed="error.value=false"
-      >{{error.text}}</b-alert>
+    <b-modal id="modal-usuario" :title="modal.title" cancel-title="Cancelar" ok-title="Guardar" class="theme-modal"
+      @hidden="resetForm" @ok="handleOk">
+      <b-alert variant="danger" dismissible class="alert alert-danger dark alert-dismissible" :show="error.value"
+        @dismissed="error.value = false">{{ error.text }}</b-alert>
       <b-form @submit.stop.prevent="submitForm">
         <b-form-group id="input-nombre" label="Nombre:" label-for="nombres">
-          <b-form-input
-            :state="validateState('first_name')"
-            id="nombres"
-            type="text"
-            placeholder="Nombre"
-            v-model="form.first_name"
-          ></b-form-input>
+          <b-form-input :state="validateState('first_name')" id="nombres" type="text" placeholder="Nombre"
+            v-model="form.first_name"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-apellido" label="Apellido:" label-for="apellidos">
-          <b-form-input
-            :state="validateState('last_name')"
-            id="apellidos"
-            type="text"
-            placeholder="Apellido"
-            v-model="form.last_name"
-          ></b-form-input>
+          <b-form-input :state="validateState('last_name')" id="apellidos" type="text" placeholder="Apellido"
+            v-model="form.last_name"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-email" label="E-mail:" label-for="E-mail">
-          <b-form-input
-            :state="validateState('username')"
-            id="email"
-            type="email"
-            placeholder="E-mail"
-            v-model="form.username"
-          ></b-form-input>
-          <b-form-invalid-feedback
-            v-if="!$v.form.username.required"
-            id="input-2-live-feedback"
-          >Este campo es obligatorio.</b-form-invalid-feedback>
+          <b-form-input :state="validateState('username')" id="email" type="email" placeholder="E-mail"
+            v-model="form.username"></b-form-input>
+          <b-form-invalid-feedback v-if="!$v.form.username.required" id="input-2-live-feedback">Este campo es
+            obligatorio.</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group id="input-password" label="Contraseña:" label-for="password">
-          <b-form-input
-            :state="validateState('password')"
-            id="password"
-            type="password"
-            placeholder="Password"
-            v-model="form.password"
-          ></b-form-input>
+          <b-form-input :state="validateState('password')" id="password" type="password" placeholder="Password"
+            v-model="form.password"></b-form-input>
           <b-form-invalid-feedback id="input-2-live-feedback">Este campo es obligatorio.</b-form-invalid-feedback>
         </b-form-group>
       </b-form>

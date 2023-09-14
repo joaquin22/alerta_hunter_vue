@@ -7,16 +7,8 @@
             <div>
               <div>
                 <a class="logo">
-                  <img
-                    class="img-fluid for-light"
-                    src="../assets/images/logo/login.png"
-                    alt="looginpage"
-                  />
-                  <img
-                    class="img-fluid for-dark"
-                    src="../assets/images/logo/logo_dark.png"
-                    alt="looginpage"
-                  />
+                  <img class="img-fluid for-light" src="../assets/images/logo/login.png" alt="looginpage" />
+                  <img class="img-fluid for-dark" src="../assets/images/logo/logo_dark.png" alt="looginpage" />
                 </a>
               </div>
               <div class="login-main login-form-card">
@@ -27,53 +19,30 @@
                     <label class="col-form-label pt-0">Your Name</label>
                     <div class="form-row">
                       <div class="col-6">
-                        <input
-                          class="form-control"
-                          type="text"
-                          required=""
-                          placeholder="First name"
-                        />
+                        <input class="form-control" type="text" required="" placeholder="First name" />
                       </div>
                       <div class="col-6">
-                        <input
-                          class="form-control"
-                          type="text"
-                          required=""
-                          placeholder="Last name"
-                        />
+                        <input class="form-control" type="text" required="" placeholder="Last name" />
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-form-label">Email Address</label>
-                    <input
-                      class="form-control"
-                      type="email"
-                      required=""
-                      placeholder="Test@gmail.com"
-                    />
+                    <input class="form-control" type="email" required="" placeholder="Test@gmail.com" />
                   </div>
                   <div class="form-group">
                     <label class="col-form-label">Password</label>
-                    <input
-                      class="form-control"
-                      type="password"
-                      name="login[password]"
-                      required=""
-                      placeholder="*********"
-                    />
+                    <input class="form-control" type="password" name="login[password]" required=""
+                      placeholder="*********" />
                     <div class="show-hide"><span class="show"></span></div>
                   </div>
                   <div class="form-group mb-0">
                     <div class="checkbox p-0">
                       <input id="checkbox1" type="checkbox" />
-                      <label class="text-muted" for="checkbox1"
-                        >Agree with<a class="ml-2" href="#"
-                          >Privacy Policy</a
-                        ></label
-                      >
+                      <label class="text-muted" for="checkbox1">Agree with<a class="ml-2" href="#">Privacy
+                          Policy</a></label>
                     </div>
-                    <button class="btn btn-primary btn-block" type="submit">
+                    <button class="btn btn-secondary btn-block" type="submit">
                       Create Account
                     </button>
                   </div>
@@ -85,13 +54,11 @@
                         Google
                       </a>
                       <a class="btn btn-light">
-                        <feather type="twitter" class="txt-twitter"></feather
-                        >twitter</a
-                      >
+                        <feather type="twitter" class="txt-twitter"></feather>twitter
+                      </a>
                       <a class="btn btn-light">
-                        <feather type="facebook" class="txt-fb"></feather
-                        >facebook</a
-                      >
+                        <feather type="facebook" class="txt-fb"></feather>facebook
+                      </a>
                     </div>
                   </div>
                   <p class="mt-4 mb-0">

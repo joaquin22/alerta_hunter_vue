@@ -22,22 +22,15 @@
 
                 <b-col xl="6">
                   <json-excel :data="incidentes" :fields="json_fields" name="incidentes.xls">
-                    <a class="btn btn-primary pull-right m-l-10">Exportar Excel</a>
+                    <a class="btn btn-secondary pull-right m-l-10">Exportar Excel</a>
                   </json-excel>
                 </b-col>
               </b-row>
               <div class="table-responsive datatable-vue">
-                <b-table
-                  show-empty
-                  stacked="md"
-                  :items="incidentes"
-                  :fields="tablefields"
-                  :current-page="currentPage"
-                  :per-page="perPage"
-                  :filter="filter"
-                >
+                <b-table show-empty stacked="md" :items="incidentes" :fields="tablefields" :current-page="currentPage"
+                  :per-page="perPage" :filter="filter">
                   <template #cell(actions)="row">
-                    <b-button variant="primary" class="mb-3 mr-1" @click="verMas(row.item)">
+                    <b-button variant="secondary" class="mb-3 mr-1" @click="verMas(row.item)">
                       <i class="fa fa-eye pr-0"></i>
                     </b-button>
                   </template>
@@ -45,12 +38,8 @@
               </div>
 
               <b-col md="6" class="p-0 mt-5">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="incidentes.length"
-                  :per-page="perPage"
-                  class="my-0"
-                ></b-pagination>
+                <b-pagination v-model="currentPage" :total-rows="incidentes.length" :per-page="perPage"
+                  class="my-0"></b-pagination>
               </b-col>
             </div>
           </div>
@@ -60,23 +49,23 @@
     <b-modal id="info-modal" title="Información" class="theme-modal" centered>
       <p>
         <strong>Ciudadano:</strong>
-        {{datos.ciudadano | uppercase}}
+        {{ datos.ciudadano | uppercase }}
       </p>
       <p>
         <strong>Dni:</strong>
-        {{datos.dni}}
+        {{ datos.dni }}
       </p>
       <p>
         <strong>Teléfono:</strong>
-        {{datos.telefono}}
+        {{ datos.telefono }}
       </p>
       <p>
         <strong>Fecha:</strong>
-        {{datos.fecha}}
+        {{ datos.fecha }}
       </p>
       <p>
         <strong>Tipo de Incidente:</strong>
-        {{datos.incidente | uppercase}}
+        {{ datos.incidente | uppercase }}
       </p>
       <p>
         <strong>Calificación:</strong>
@@ -84,27 +73,27 @@
       </p>
       <p>
         <strong>Estado:</strong>
-        {{datos.estado | uppercase}}
+        {{ datos.estado | uppercase }}
       </p>
       <p>
         <strong>Tipo de Origen:</strong>
-        {{datos.origen | uppercase}}
+        {{ datos.origen | uppercase }}
       </p>
       <p>
         <strong>Usuario que Atendio:</strong>
-        {{datos.usuario | uppercase}}
+        {{ datos.usuario | uppercase }}
       </p>
       <p>
         <strong>Personal:</strong>
-        {{datos.personal | uppercase}}
+        {{ datos.personal | uppercase }}
       </p>
       <p>
         <strong>Unidad:</strong>
-        {{datos.unidad | uppercase}}
+        {{ datos.unidad | uppercase }}
       </p>
       <p>
         <strong>Observación:</strong>
-        {{datos.observación | uppercase}}
+        {{ datos.observación | uppercase }}
       </p>
       <p>
         <strong>Imagen de evidencia:</strong>

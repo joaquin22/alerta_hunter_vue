@@ -14,48 +14,26 @@
                 <b-col xl="10" class="delete-datatable">
                   <b-input-group class="datatable-btn">
                     <b-form-input v-model="filter" placeholder="Buscar por Nombres" class="mr-3"></b-form-input>
-                    <b-button
-                      variant="success"
-                      :disabled="!filter"
-                      @click="setFilter(filter)"
-                      class="mr-1"
-                    >Buscar</b-button>
-                    <b-button variant="primary" @click="limpiar">Limpiar</b-button>
+                    <b-button variant="success" :disabled="!filter" @click="setFilter(filter)"
+                      class="mr-1">Buscar</b-button>
+                    <b-button variant="secondary" @click="limpiar">Limpiar</b-button>
                   </b-input-group>
                 </b-col>
               </b-row>
               <div class="table-responsive datatable-vue">
-                <vuetable
-                  ref="vuetable"
-                  :api-url="apiBase"
-                  :query-params="makeQueryParams"
-                  :per-page="perPage"
-                  :reactive-api-url="true"
-                  :fields="fields"
-                  :append-params="moreParams"
-                  pagination-path
-                  @vuetable:pagination-data="onPaginationData"
-                >
+                <vuetable ref="vuetable" :api-url="apiBase" :query-params="makeQueryParams" :per-page="perPage"
+                  :reactive-api-url="true" :fields="fields" :append-params="moreParams" pagination-path
+                  @vuetable:pagination-data="onPaginationData">
                   <div slot="actions" slot-scope="props">
-                    <b-button
-                      variant="primary"
-                      class="mb-3 mr-1"
-                      @click.stop="confimacion('desbloquear',props.rowData.id)"
-                      v-if="props.rowData.estado=='BLOQUEADO'"
-                    >Desbloquear</b-button>
-                    <b-button
-                      variant="danger"
-                      class="mb-3 mr-1"
-                      @click.stop="confimacion('bloquear',props.rowData.id)"
-                      v-if="props.rowData.estado=='ACTIVO'"
-                    >Bloquear</b-button>
+                    <b-button variant="secondary" class="mb-3 mr-1"
+                      @click.stop="confimacion('desbloquear', props.rowData.id)"
+                      v-if="props.rowData.estado == 'BLOQUEADO'">Desbloquear</b-button>
+                    <b-button variant="danger" class="mb-3 mr-1" @click.stop="confimacion('bloquear', props.rowData.id)"
+                      v-if="props.rowData.estado == 'ACTIVO'">Bloquear</b-button>
                   </div>
                 </vuetable>
-                <vuetable-pagination-bootstrap
-                  class="mt-4"
-                  ref="pagination"
-                  @vuetable-pagination:change-page="onChangePage"
-                />
+                <vuetable-pagination-bootstrap class="mt-4" ref="pagination"
+                  @vuetable-pagination:change-page="onChangePage" />
               </div>
             </div>
           </div>
@@ -157,7 +135,7 @@ export default {
       );
     },
   },
-  created() {},
+  created() { },
   methods: {
     onPaginationData(paginationData) {
       this.$refs.pagination.setPaginationData(paginationData);

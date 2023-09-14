@@ -1,15 +1,11 @@
 <template>
-  <b-list-group-item
-    href="#"
-    class="flex-column align-items-start"
-    :style="{ 'background-color': datos.color }"
-    @click.stop="goMap"
-  >
+  <b-list-group-item href="#" class="flex-column align-items-start" :style="{ 'background-color': datos.color }"
+    @click.stop="goMap">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1" :style="css">{{datos.tipo |uppercase}}</h5>
+      <h5 class="mb-1" :style="css">{{ datos.tipo | uppercase }}</h5>
       <small class="text-muted">
-        <b-button variant="primary" v-if="enviados" @click.stop="atendido">Atendido</b-button>
-        <b-dropdown variant="primary" id="dropdown-1" text="Acciones" size="sm" right v-else>
+        <b-button variant="secondary" v-if="enviados" @click.stop="atendido">Atendido</b-button>
+        <b-dropdown variant="secondary" id="dropdown-1" text="Acciones" size="sm" right v-else>
           <b-dropdown-item @click.stop="enviado">Enviado</b-dropdown-item>
           <b-dropdown-item @click.stop="confimacion('fuera')">Fuera de Jurisdicción</b-dropdown-item>
           <b-dropdown-item @click.stop="confimacion('bloquear')">Bloquear Usuario</b-dropdown-item>
@@ -17,12 +13,12 @@
       </small>
     </div>
 
-    <p class="mb-1" :style="css">Nombres: {{datos.nombre | uppercase}}</p>
-    <p class="mb-1" :style="css">Nro. Documento: {{datos.dni}}</p>
-    <p class="mb-1" :style="css">Teléfono: {{datos.telefono}}</p>
-    <p class="mb-1" v-show="datos.personal" :style="css">Personal: {{datos.personal | uppercase}}</p>
-    <p class="mb-1" v-show="datos.unidad" :style="css">Unidad: {{datos.unidad | uppercase}}</p>
-    <p class="mb-1" :style="css">Ubicación: {{datos.ubicacion}}</p>
+    <p class="mb-1" :style="css">Nombres: {{ datos.nombre | uppercase }}</p>
+    <p class="mb-1" :style="css">Nro. Documento: {{ datos.dni }}</p>
+    <p class="mb-1" :style="css">Teléfono: {{ datos.telefono }}</p>
+    <p class="mb-1" v-show="datos.personal" :style="css">Personal: {{ datos.personal | uppercase }}</p>
+    <p class="mb-1" v-show="datos.unidad" :style="css">Unidad: {{ datos.unidad | uppercase }}</p>
+    <p class="mb-1" :style="css">Ubicación: {{ datos.ubicacion }}</p>
   </b-list-group-item>
   <!-- <b-card class="card-alertas" :style="{ 'background-color': datos.color }" @click.stop="goMap">
     <b-card-title>{{datos.tipo}}</b-card-title>
@@ -35,7 +31,7 @@
       <br />
       Ubicación: {{datos.ubicacion}}
     
-      <b-dropdown variant="primary" id="dropdown-1" text="Acciones" class="m-md-2">
+      <b-dropdown variant="secondary" id="dropdown-1" text="Acciones" class="m-md-2">
         <b-dropdown-item @click.stop="enviado">Enviado</b-dropdown-item>
         <b-dropdown-item @click.stop="fuera">Fuera de Jurisdicción</b-dropdown-item>
         <b-dropdown-item @click.stop="bloquear">Bloquear Usuario</b-dropdown-item>
